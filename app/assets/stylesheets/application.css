@@ -1,0 +1,82 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any styles
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
+ * file per style scope.
+ *
+ *= require jquery-ui
+ *= require bootstrap-datepicker
+ *= require dataTables/src/demo_table_jui
+ *= require bootstrap
+ *= require style
+ *= require daterangepicker
+ *= require_tree .
+ *= require_self
+ */
+
+.pending{
+  font-weight: bold;
+  color: red;
+}
+.active{
+  font-weight: bold;
+  color: green;
+}
+
+.ontop,.canceltop,.waivetop {
+    position:fixed;
+    background-color: #cccccc;
+    opacity: .97;
+    display: none;
+    top:0%;
+    left:0%;
+    width:100%;  
+    height:100%;  
+  }
+  #popup {
+    width: 350px;
+    height: 200px;
+    position: absolute;
+    color: #000000;
+    background-color: #ffffff;
+    top: 20%;
+    left: 40%;
+  }
+
+  .transaction_area{
+    width: 322px;
+    height: 70px;
+  }
+  
+  .cancel{
+    text-decoration: none;
+  }
+
+  .invoice_stat{
+    font-size: 20px;
+    padding-top: 10px;
+    font-weight: bold;
+    color: #C9302C;
+  }
+  .user_add{
+    border-radius: 2px;
+    color: #2f2f2f;
+    margin-top: 10px;
+    padding: 20px 15px;
+  }
+  .user_pay_btn{
+    margin-top: -6px !important;
+    margin-right: 15px;
+  }
+
+  .range_picker{
+    background: #5cb85c; 
+    cursor: pointer; 
+    padding: 5px 10px;
+  }

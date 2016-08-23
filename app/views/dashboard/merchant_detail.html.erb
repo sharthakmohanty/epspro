@@ -1,0 +1,270 @@
+<section>
+  	<div class="container">
+  		<div class="padding_inner details_lookup">
+		  	<h1>Merchant (<%=@merchant.merchant_uniq_id.upcase%>)</h1>
+	  		<!--tab_menu ends-->	  				  	
+		  	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+			  	<div class="merchant_details">
+			  		<div class="row">
+				  		<h2>Merchant Details</h2>
+				  		<table>
+				  			<tr>
+				  				<td>First Name:</td>
+				  				<td> <%= @merchant.first_name%></td>
+				  			</tr>
+				  			<tr>
+				  				<td>Last Name: </td>
+				  				<td>	
+				  					<%= @merchant.last_name%>		  					
+							  	</td>
+				  			</tr>
+				  			<tr>
+				  				<td>Email Id:</td>
+				  				<td>
+				  					<%= @merchant.email_address%>			  			
+				  				</td>
+				  			</tr>	
+				  			<tr>
+				  				<td>Phone Number:</td>
+				  				<td>
+				  					<%= @merchant.phone_number%>
+							  	</td>
+				  			</tr>
+				  			<tr>
+				  				<td>Age:</td>
+				  				<td>
+				  					<%= @merchant.age%>
+							  	</td>
+				  			</tr>
+				  			<tr>
+				  				<td>Sex:</td>
+				  				<td>
+				  					<%= @merchant.sex%>
+							  	</td>
+				  			</tr>		  			
+						</table>
+			  		</div>
+		  		</div>
+		  	</div>
+
+		  	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+		  		<div class="merchant_details business_details">
+			  		<div class="row">
+				  		<h2>Business Details</h2>
+				  		<table>
+				  			<tr>
+				  				<td>Business Name:</td>
+				  				<td><%= @merchant.business_name%></td>
+				  			</tr>
+				  			<tr>
+				  				<td>Business Type:</td>
+				  				<td><%= @merchant.business_type%></td>
+				  			</tr>
+				  			<tr>
+				  				<td>Industry Type:</td>
+				  				<td><%= @merchant.industry_type %></td>
+				  			</tr>	
+				  			<tr class="add_top">
+				  				<td>Address:</td>
+				  				<td><%= @merchant.business_address%></td>
+				  			</tr>	
+				  			<tr>
+				  				<td>Status:</td>
+				  				<td>
+				  					<% if @merchant.status == "active" %>
+				  						<b style="color: green;" ><%= @merchant.status.upcase unless @merchant.status.nil? %></b>
+				  					<% elsif @merchant.status == "inactive" %>
+				  						<b style="color: orange;" ><%= @merchant.status.upcase unless @merchant.status.nil? %></b>
+				  					<% end %>
+				  				</td>
+				  			</tr>			  			 			
+						</table>
+			  		</div>
+		  		</div>
+		  	</div>
+		  	<div class="clearfix"></div>
+
+		  	<div class="kyc_details">
+			  	<h2>KYC Details</h2>
+			  	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+				  	<div class="merchant_details">
+				  		<div class="row">
+					  		<table>
+					  			<tr class="kyc_txt">
+					  				<td>
+					  					KYC Submitted
+									</td>
+					  				<td>
+					  					<% if @merchant.is_kyc_submitted != true %>
+											No
+										<% else %>
+											Yes
+										<% end %>
+									</td>
+					  			</tr>
+					  			<tr>
+					  				<td>
+										Address Proof:
+					  				</td>
+					  				<td>
+										<div data-toggle="modal" data-target="#myModal" class="thumb_img"><%= image_tag @merchant.address_proof.url, :title => "Click here to view the larger image", :height => 150, :width => 250 unless @merchant.address_proof.blank? %>
+										</div>
+										 <div class="modal fade" id="myModal" role="dialog">
+										    <div class="modal-dialog">
+										      	<div class="modal-content">
+										        	<div class="modal-body">
+										        		<button type="button" class="close" data-dismiss="modal">&times;</button>
+										          		<%= image_tag @merchant.address_proof.url unless @merchant.address_proof.blank? %>
+										        	</div>  
+										      	</div>  
+										    </div>
+										</div> 
+
+					  				</td>
+					  			</tr>
+					  			<tr>
+					  				<td>ID Proof:</td>
+					  				<td>
+										<div data-toggle="modal" data-target="#myModal1" class="thumb_img"><%= image_tag @merchant.id_proof.url, :title => "Click here to view the larger image", :height => 150, :width => 250 unless @merchant.id_proof.blank? %>
+										</div>
+								 		<div class="modal fade" id="myModal1" role="dialog">
+									    	<div class="modal-dialog">
+									      		<div class="modal-content">
+									        		<div class="modal-body">
+									        			<button type="button" class="close" data-dismiss="modal">&times;</button>
+										          			<%= image_tag @merchant.id_proof.url unless @merchant.id_proof.blank? %>
+									        		</div>  
+										      	</div>  
+										    </div>
+										</div> 
+
+					  				</td>
+					  			</tr>
+					  			<tr>
+					  				<td>
+					  					Business Address Proof:
+					  				</td>
+					  				<td>
+										<div data-toggle="modal" data-target="#myModal2" class="thumb_img"><%= image_tag @merchant.business_address_proof.url, :title => "Click here to view the larger image", :height => 150, :width => 250 unless @merchant.business_address_proof.blank? %></div>
+										 <div class="modal fade" id="myModal2" role="dialog">
+										    <div class="modal-dialog">
+										      	<div class="modal-content">
+											        <div class="modal-body">
+											        	<button type="button" class="close" data-dismiss="modal">&times;</button>
+											          	<%= image_tag @merchant.business_address_proof.url unless @merchant.business_address_proof.blank? %>
+											        </div>  
+										      	</div>  
+										    </div>
+										 </div>
+					  				</td>
+					  			</tr>
+					  			<tr>
+					  				<td>
+					  					Business ID Proof:
+					  				</td>
+					  				<td> 
+					  					<div data-toggle="modal" data-target="#myModal3" class="thumb_img">
+						  					<%= image_tag @merchant.business_id_proof.url, :title => "Click here to view the larger image", :height => 150, :width => 250 unless @merchant.business_id_proof.blank? %>
+						  				</div>
+										 <div class="modal fade" id="myModal3" role="dialog">
+										    <div class="modal-dialog">
+										      	<div class="modal-content">
+											        <div class="modal-body">
+											        	<button type="button" class="close" data-dismiss="modal">&times;</button>
+											          	<%= image_tag @merchant.business_id_proof.url unless @merchant.business_id_proof.blank? %>
+											        </div>  
+										      	</div>  
+										    </div>
+										</div>
+					  				</td>
+					  			</tr>
+					  		</table>
+				  		</div>
+				  	</div>
+			  	</div>	
+
+			  	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+				  	<div class="merchant_details business_details given_id">
+				  		<div class="row">
+					  		<table>			  			
+					  			<tr>
+					  				<td>Given Address Proof:</td>
+					  				<td><%= @merchant.given_address_proof %></td>
+					  			</tr>
+					  			<tr>
+					  				<td>Given Id Proof:</td>
+					  				<td><%= @merchant.given_id_proof %></td>
+					  			</tr>
+					  			<tr>
+					  				<td>
+					  					Given Business Address Proof:
+					  				</td>
+					  				<td><%= @merchant.given_business_address_proof %></td>
+					  			</tr>
+					  			<tr>
+					  				<td>
+					  					Given Business Id Proof:  
+					  				</td>
+					  				<td><%= @merchant.given_business_id_proof %></td>
+					  			</tr>
+					  		</table>
+				  		</div>
+				  	</div>
+			  	</div>
+			  	<div class="clearfix"></div>			  	
+	  		</div>
+			  
+		  	<div class="merchant_device_details">
+			  	<h1>Device Details</h1>
+			  	<div class="merchant_table table-responsive">
+			  		<table class="table text-center display" id="merchant_device">
+			  			<thead>
+						    <tr>
+                				<th>Device Created On</th>
+					      		<th>Terminal ID</th>
+					      		<th>Phone Number</th>
+					      		<th>Serial Number</th>
+						      	<th>Device Type</th>
+						      	<th>Device Status</th>
+						    </tr>
+					  	</thead>
+					  	<tbody>
+						  	<% @merchant_device.each do |device| %>
+							    <tr>                 
+							    	<td><%= device.created_at.to_time.strftime('%d/%m/%Y at %l:%M %p') unless device.created_at.nil? %></td>
+						      		<td align="center"><%= link_to device.terminal_id, individual_device_path(device) %></td>
+						      		<td align="center"><%= device.sim_phone_number %> </td>    
+						      		<td align="center"><%= device.device_serial_number %></td>
+							      	<td align="center"><%= device.device_make %></td>
+							      	<td align="center"><%= device.device_status.upcase unless device.device_status.nil? %></td>
+							    </tr>
+						  	<% end %>
+					  	</tbody>
+			  		</table>
+			  	</div>
+	  		</div>
+		</div>
+	</div>
+</section>
+
+<script type="text/javascript">
+  	<% if @merchant_device.count < 50 %>
+	  $(document).ready( function() {
+	    $('#merchant_device').dataTable({
+          	"aaSorting": [],
+	        "bPaginate": false,  
+          	"iDisplayLength": 50,
+          	"aLengthMenu": [[50, 100, 150, -1], [50, 100, 150, "All"]]
+	    });
+	  });
+	<% else %>
+	  $(document).ready( function() {
+	      $('#merchant_device').dataTable({
+          	"aaSorting": [],
+	        "bPaginate": true,
+          	"iDisplayLength": 50,
+          	"aLengthMenu": [[50, 100, 150, -1], [50, 100, 150, "All"]]
+	    });
+	  });
+	<% end %>
+</script>

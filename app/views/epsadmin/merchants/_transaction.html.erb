@@ -1,0 +1,98 @@
+<table id="transaction" class="display table text-center">
+	<thead>
+		<tr>
+			<th>
+				Date
+			</th>
+			<th>
+				Device ID
+			</th>
+			<th>
+				Invoice
+			</th>
+			<th>
+				Type 
+			</th>
+			<th>
+				Amount
+			</th>
+			<th>
+				Status
+			</th>
+			<th>
+				Payment Comments
+			</th>
+			<th>
+				Details
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @epsadmin_transaction_list.each do |transaction_list| %>
+			<% if !transaction_list.nil? || !transaction_list.blank? %>
+				<tr>
+					<td>
+						<%= transaction_list.created_at.to_time.strftime('%d/%m/%Y at %l:%M %p')unless transaction_list.created_at.nil? %>
+					</td>
+					<td>
+						<%= transaction_list.device.terminal_id %>
+						
+					</td>
+					<td>
+						<%= transaction_list.invoice_number unless transaction_list.invoice_number.nil? %>
+					</td>
+					<td>
+						<%= transaction_list.transaction_type unless transaction_list.transaction_type.nil? %>
+					</td>
+					<td>
+						<%= transaction_list.amount unless transaction_list.amount.nil? %>
+					</td>
+					<td>
+						<%= transaction_list.transaction_status.upcase unless transaction_list.transaction_status.nil? %>
+					</td>
+					<%if transaction_list.transaction_status=="paid"%>
+						<td>
+							<%= transaction_list.transaction_details unless transaction_list.transaction_details.nil? %>
+						</td>
+					<% else %>
+						<td>N/A</td>
+					<%end%>
+					<td>
+						<%= link_to "View Details", epsadmin_merchant_transaction_details_path(@transc_merchant.merchant_uniq_id,transaction_list.id)  unless transaction_list.device.blank? %>
+					</td>
+				</tr>
+			<% else %>
+				<tr>
+					<td colspan="7" style="color: red;">
+						Sorry No Records Available For The Given Time Period!
+					</td>
+				</tr>
+			<% end %>
+		<% end %>
+	</tbody>			  			
+</table>
+
+
+
+<script type="text/javascript">
+	<% if @epsadmin_transaction_list.count < 50 %>
+	  $(document).ready( function() {
+	    $('#transaction').dataTable({
+			"aaSorting": [],
+	        "bPaginate": false,  
+          	"iDisplayLength": 50,
+      		"aLengthMenu": [[50, 100, 150, -1], [50, 100, 150, "All"]]
+	    });
+	  });
+	<% else %>
+	  $(document).ready( function() {
+      	$('#transaction').dataTable({
+			"aaSorting": [],
+	        "bPaginate": true,
+          	"iDisplayLength": 50,
+          	"aLengthMenu": [[50, 100, 150, -1], [50, 100, 150, "All"]]
+	    });
+	  });
+	<% end %>
+
+</script>

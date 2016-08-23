@@ -1,0 +1,408 @@
+
+<section>
+  	<div class="container">
+  	    <% if !flash[:notice].nil? || !flash[:notice].blank? %>
+	      	<p class="alert alert-success">
+		        <a title="close" aria-label="close" data-dismiss="alert" class="close" href="#">×</a>
+		        <%= flash[:notice] %>
+	      	</p>
+	    <% end %>
+  		<div class="padding_inner details_lookup">
+		  	<h1><%= render_breadcrumbs :separator => ' > ' %> > <%= @epsadmin_merchant.first_name %> (<%=@epsadmin_merchant.merchant_uniq_id.upcase%>)</h1>
+	  		<div class="tab_menu">
+	  			<ul>
+	  				<li><%=link_to "Details",epsadmin_merchant_path(@epsadmin_merchant.merchant_uniq_id) , :class=>"active" %></li>
+	  				<li><%=link_to "Devices",epsadmin_merchant_devices_path(@epsadmin_merchant.merchant_uniq_id)%></li>
+	  				<li><%= link_to 'Transactions', epsadmin_merchant_transaction_path(@epsadmin_merchant.merchant_uniq_id) %></li>
+	  				<li><%= link_to 'Invoices', epsadmin_merchant_invoices_path(@epsadmin_merchant.merchant_uniq_id) %></li>
+	  			</ul>
+	  			<div class="clearfix"></div>
+	  		</div>
+	  		<!--tab_menu ends-->	  				  	
+		  	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+			  	<div class="merchant_details">
+			  		<div class="row">
+				  		<h2>Merchant Details</h2>
+				  		<table>
+				  			<tr>
+				  				<td>First Name:</td>
+				  				<td> <%= @epsadmin_merchant.first_name%></td>
+				  			</tr>
+				  			<tr>
+				  				<td>Last Name: </td>
+				  				<td>	
+				  					<%= @epsadmin_merchant.last_name%>		  					
+							  	</td>
+				  			</tr>
+				  			<tr>
+				  				<td>Email Id:</td>
+				  				<td>
+				  					<%= @epsadmin_merchant.email_address%>			  			
+				  				</td>
+				  			</tr>	
+				  			<tr>
+				  				<td>Phone Number:</td>
+				  				<td>
+				  					<%= @epsadmin_merchant.phone_number%>
+							  	</td>
+				  			</tr>
+				  			<tr>
+				  				<td>Age:</td>
+				  				<td>
+				  					<%= @epsadmin_merchant.age%>
+							  	</td>
+				  			</tr>
+				  			<tr>
+				  				<td>Sex:</td>
+				  				<td>
+				  					<%= @epsadmin_merchant.sex%>
+							  	</td>
+				  			</tr>		  			
+						</table>
+			  		</div>
+		  		</div>
+		  	</div>
+
+		  	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+		  		<div class="merchant_details business_details">
+			  		<div class="row">
+				  		<h2>Business Details</h2>
+				  		<table>
+				  			<tr>
+				  				<td>Business Name:</td>
+				  				<td><%= @epsadmin_merchant.business_name%></td>
+				  			</tr>
+				  			<tr>
+				  				<td>Business Type:</td>
+				  				<td><%= @epsadmin_merchant.business_type%></td>
+				  			</tr>
+				  			<tr>
+				  				<td>Industry Type:</td>
+				  				<td><%= @epsadmin_merchant.industry_type %></td>
+				  			</tr>	
+				  			<tr class="add_top">
+				  				<td>Address:</td>
+				  				<td><%= @epsadmin_merchant.business_address%></td>
+				  			</tr>	
+				  			<tr>
+				  				<td>Status:</td>
+				  				<td>
+				  					<% if @epsadmin_merchant.status == "active" %>
+			  							<b class="active">
+		  									<%= @epsadmin_merchant.status.upcase unless @epsadmin_merchant.status.nil? %>
+		  								</b>
+	  								<% else %>
+										<b class="pending">
+		  									<%= @epsadmin_merchant.status.upcase unless @epsadmin_merchant.status.nil? %>
+		  								</b>
+	  								<% end %>
+				  				</td>
+				  			</tr>	
+				  			<tr>
+				  				<td>Subscription Date:</td>
+				  				 <td> 
+				  				 	<% if !@epsadmin_merchant.subscription.start_subscription_date.nil? || !@epsadmin_merchant.subscription.start_subscription_date.empty? %>
+				  				 		<%
+			  				       			d = @epsadmin_merchant.subscription.start_subscription_date.split("/")
+			  				       			if !d.nil? && !d.blank?
+									      		sub_date = d[1].to_s + "/" + d[0].to_s + "/" +  d[2].to_s
+								      		end
+				  				 		%>
+				  				 		<%= sub_date %>
+				  				 	<% end %>
+				  				 	<%#= Date.strptime(@epsadmin_merchant.subscription.start_subscription_date, "%m/%d/%Y").strftime("%d/%m/%Y") unless @epsadmin_merchant.subscription.start_subscription_date.nil?%>
+			  				 	</td>
+				  			</tr>		  			 			
+						</table>
+			  		</div>
+		  		</div>
+		  	</div>
+		  	<div class="clearfix"></div>
+
+		  	<div class="kyc_details">
+			  	<h2>KYC Details</h2>
+			  	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+				  	<div class="merchant_details">
+				  		<div class="row">
+					  		<table>
+					  			<tr class="kyc_txt">
+					  				<td>
+					  					KYC Submitted
+									</td>
+					  				<td>
+					  					<% if @epsadmin_merchant.is_kyc_submitted != true  %>
+											No
+										<% else %>
+											Yes
+										<% end %>
+									</td>
+					  			</tr>
+					  			<tr>
+					  				<td>
+										Address Proof:
+					  				</td>
+					  				<td>
+										<div data-toggle="modal" data-target="#myModal" class="thumb_img"><%= image_tag @epsadmin_merchant.address_proof.url, :height => 150, :width => 250 unless @epsadmin_merchant.address_proof.blank? %></div>
+										 <div class="modal fade" id="myModal" role="dialog">
+										    <div class="modal-dialog">
+										      <div class="modal-content">
+										        <div class="modal-body">
+										        <button type="button" class="close" data-dismiss="modal">&times;</button>
+										          <%= image_tag @epsadmin_merchant.address_proof.url unless @epsadmin_merchant.address_proof.blank? %>
+										        </div>  
+										      </div>  
+										    </div>
+										 </div> 
+					  				</td>
+					  			</tr>
+					  			<tr>
+					  				<td>ID Proof:</td>				  			
+									<td>
+										<div data-toggle="modal" data-target="#myModal1" class="thumb_img"><%= image_tag @epsadmin_merchant.id_proof.url, :height => 150, :width => 250 unless @epsadmin_merchant.id_proof.blank? %></div>
+										 <div class="modal fade" id="myModal1" role="dialog">
+										    <div class="modal-dialog">
+										      <div class="modal-content">
+										        <div class="modal-body">
+										        <button type="button" class="close" data-dismiss="modal">&times;</button>
+										          <%= image_tag @epsadmin_merchant.id_proof.url unless @epsadmin_merchant.id_proof.blank? %>
+										        </div>  
+										      </div>  
+										    </div>
+										 </div> 
+					  				</td>
+					  			</tr>
+					  			<tr>
+					  				<td>
+					  					Business Address Proof:
+					  				</td>				
+					  				<td>
+										<div data-toggle="modal" data-target="#myModal2" class="thumb_img"><%= image_tag @epsadmin_merchant.business_address_proof.url, :height => 150, :width => 250 unless @epsadmin_merchant.business_address_proof.blank? %></div>
+										 <div class="modal fade" id="myModal2" role="dialog">
+										    <div class="modal-dialog">
+										      	<div class="modal-content">
+											        <div class="modal-body">
+											        	<button type="button" class="close" data-dismiss="modal">&times;</button>
+											          	<%= image_tag @epsadmin_merchant.business_address_proof.url unless @epsadmin_merchant.business_address_proof.blank? %>
+											        </div>  
+										      	</div>  
+										    </div>
+										 </div> 
+					  				</td>
+					  			</tr>
+					  			<tr>
+					  				<td>
+					  					Business ID Proof:
+					  				</td>
+					  				<td> 
+						  				<div data-toggle="modal" data-target="#myModal3" class="thumb_img">
+						  					<%= image_tag @epsadmin_merchant.business_id_proof.url, :height => 150, :width => 250 unless @epsadmin_merchant.business_id_proof.blank? %>
+						  				</div>
+										 <div class="modal fade" id="myModal3" role="dialog">
+										    <div class="modal-dialog">
+										      	<div class="modal-content">
+											        <div class="modal-body">
+											        	<button type="button" class="close" data-dismiss="modal">&times;</button>
+											          	<%= image_tag @epsadmin_merchant.business_id_proof.url unless @epsadmin_merchant.business_id_proof.blank? %>
+											        </div>  
+										      	</div>  
+										    </div>
+										</div> 
+					  				</td>
+					  			</tr>
+					  		</table>
+				  		</div>
+				  	</div>
+			  	</div>	
+
+			  	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+				  	<div class="merchant_details business_details given_id">
+				  		<div class="row">
+					  		<table>			  			
+					  			<tr>
+					  				<td>Given Address Proof:</td>
+					  				<td><%= @epsadmin_merchant.given_address_proof %></td>
+					  			</tr>
+					  			<tr>
+					  				<td>Given Id Proof:</td>
+					  				<td><%= @epsadmin_merchant.given_id_proof %></td>
+					  			</tr>
+					  			<tr>
+					  				<td>
+					  					Given Business Address Proof:
+					  				</td>
+					  				<td><%= @epsadmin_merchant.given_business_address_proof %></td>
+					  			</tr>
+					  			<tr>
+					  				<td>
+					  					Given Business Id Proof:  
+					  				</td>
+					  				<td><%= @epsadmin_merchant.given_business_id_proof %></td>
+					  			</tr>
+					  		</table>
+				  		</div>
+				  	</div>
+			  	</div>
+			  	<div class="clearfix"></div>			  	
+	  		</div>
+
+		  <div class="submit_space button_space text-center">
+		  		<%= link_to 'Edit', edit_epsadmin_merchant_path, :class=>"btn btn-info", :disabled => false if is_merchant_editable?(@epsadmin_merchant.status) %>
+
+		  		<% @device = @epsadmin_merchant.devices.where(:status => "active").count %>
+		  		<% @invoice = @epsadmin_merchant.subscription.invoices.where(:status.ne => "pending").count %>
+
+		  		<% if @device == 0 && @invoice == 0 %>
+		  			<%= link_to 'Destroy', epsadmin_merchant_path, :class => "btn btn-danger", method: :delete, data: { confirm: 'Are you sure you want to Destroy the Merchant?' }, :disabled => false if is_merchant_deletable?(@epsadmin_merchant.status) %>
+		  		<% end %>
+
+		  		<%= link_to 'Back', epsadmin_merchants_path, :class => "btn btn-primary" %>
+		  			  		
+		  		<% unless @history_records.blank?%>
+					<div class="version_det btn btn-warning">History Details</div>
+					<div class="clearfix"></div>
+					<div class="merchant_table table-responsive">
+						<table id="history_table" class="display table text-left merchant_history">
+							<thead>
+								<tr>
+								    <th>Version No</th>
+								    <th>Updated At</th>
+								    <th>Original</th>
+								    <th>Modified</th>
+								    <th>Modifier Name</th>
+								</tr>
+						    </thead>
+					    	<tbody>
+							  	<% @history_records.each do |history| %>
+							  		<% if history.action != "create" %>
+									    <tr>
+									      	<td align="center">
+									      		<%= (history.version - 1) %>
+									      	</td>
+									    	<td align="center">
+									      		<%=history.updated_at.strftime("%d %b %Y") unless history.updated_at.nil? %> at <%= history.updated_at.strftime("%I:%M %P") unless history.updated_at.nil? %>
+								      		</td>
+									      	<td>
+										    	<%history.original.each do |k,v| if check_version_field(k)%>
+										      		<%= t("epsadmin_merchants.#{k.to_s}")%> : <%= v.to_s %> <br>
+										      	<% end 
+									      		end %>
+									      	</td>
+									    	<td>
+										    	<%history.modified.each do |k,v|
+										    		if check_version_field(k) %>
+										      		<%= t("epsadmin_merchants.#{k.to_s}")%> : <%= v.to_s %> <br>
+									      		<% end 
+									      		end %>
+								      		</td>
+									      	<td align="center">
+									      		<% @name = User.find(history.modifier_id) unless history.modifier_id.blank? %>
+									      		<%= @name.full_name unless @name.blank? %>
+									      	</td>
+									    </tr>
+								    <% end %>
+							  	<% end %>
+							</tbody>
+						</table>
+					</div>
+				<% end %>
+	 	 	</div>
+			  
+			<!--status update-->
+		  	<div class="status_update text-center">
+			  	<h3>Status Update</h3>
+
+				<% if @epsadmin_merchant.status == "pending" %>
+					<button type="button" id="activate" class="btn btn-success scheck">Activate</button> 
+					<button type="button" id="inactivate" class="btn btn-warning" disabled>Inactivate</button> 
+					<button type="button" id="cancel" class="btn btn-danger" disabled>Cancel</button> 
+					<button type="button" id="close" class="btn btn-info" disabled>Close</button> 
+				<% end %>
+
+				<% if @epsadmin_merchant.status == "active" %>
+					<button type="button" id="activate"  class="btn btn-success" disabled>Activated</button> 
+					<button type="button" id="inactivate" class="btn btn-warning scheck">Inactivate</button> 
+					<button type="button" id="cancel" class="btn btn-danger scheck">Cancel</button> 
+					<button type="button" id="close" class="btn btn-info scheck">Closed</button> 
+				<% end %>
+
+				<% if @epsadmin_merchant.status == "inactive" %>
+					<button type="button" id="activate"  class="btn btn-success scheck">Activate</button> 
+					<button type="button" id="inactivate" class="btn btn-warning" disabled>Inactivated</button> 
+					<button type="button" id="cancel" class="btn btn-danger scheck">Cancel</button> 
+					<button type="button" id="close" class="btn btn-info scheck">Close</button> 
+				<% end %>
+
+				<% if @epsadmin_merchant.status == "cancelled" %>
+					Account is currently cancelled.
+				<% end %>
+				<% if @epsadmin_merchant.status == "closed" %>
+					Account is currently closed.
+				<% end %>
+		  	</div> <!--stats update ends-->
+		</div>
+  	</div>
+</section>
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+	 $(".merchant_table").hide();
+    $('.scheck').click(function(){
+    	var status= $(this).attr('id');
+    	var id = "<%= @epsadmin_merchant.id %>"
+    	if(status == "activate")
+    	var check = confirm("Are you sure you want to Activate the Merchant?");
+    	else if(status == "inactivate")
+    		var check = confirm("Are you sure you want to Inactivate the Merchant?");
+    	else if(status == "cancel")
+    		var check = confirm("Are you sure you want to Cancel the Merchant?");
+    	else 
+    		var check = confirm("Are you sure you want to Close the Merchant?");
+        if (check == true) {
+			$.ajax({
+			type: "POST",
+			url: '/epsadmin/merchants/merchant_status_check',
+			data: {st: status, id: id},
+			dataType: "json",
+		 	success: function(data){
+	                if(data == true){
+	                  	alert("Status is successfully updated");
+	                  	window.location.reload();
+	                }
+	                else{
+	                  	alert("Device status should be active. All the merchant fields should be filled up");
+	                  	return false;
+	                }   	
+	            }
+			});
+	   
+		}
+		else{
+			return false;
+		}
+	});
+	$(".version_det").click(function(){
+		$(".merchant_table").toggle();
+	});
+});
+
+<% if @history_records.count < 50 %>
+ 	$(document).ready( function() {
+		$('.merchant_history').dataTable({
+			"order": [[ 0, "desc" ]],
+		    "bPaginate": false,  
+	        "iDisplayLength": 50,
+	        "aLengthMenu": [[50, 100, 150, -1], [50, 100, 150, "All"]]
+		});
+	});
+<% else %>
+	$(document).ready( function() {
+	  	$('.merchant_history').dataTable({
+			"order": [[ 0, "desc" ]],
+	    	"bPaginate": true,
+	        "iDisplayLength": 50,
+	        "aLengthMenu": [[50, 100, 150, -1], [50, 100, 150, "All"]]
+		});
+	});
+<% end %>
+</script>

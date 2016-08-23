@@ -1,0 +1,104 @@
+<% a = (100000..999999).to_a.shuffle %>
+
+<section>
+  	<div class="container">
+  		<div class="padding_inner">
+	  		<h1>Transactions</h1>		  		
+		  	<div class="merchant_table table-responsive dash_transaction">
+
+		  		<div id="reportrange" class="pull-right range_picker">
+					<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+				    <span></span> <b class="caret"></b>
+				</div>
+<%= a.pop %>
+		      	<div class="trans_result">
+		      		<%=render :partial =>"transaction_list" %>
+		      	</div>
+
+		  	</div><!--merchant_table ends-->
+		</div>
+  	</div>
+</section> 
+   
+<div id="popDiv" class="ontop">
+	<table cellpadding="4" cellspacing="4" id="popup">
+		<tr>
+			<td align="right">
+				<a title="Click here to close the pop-up" href="#" onClick="hide('popDiv')">X</a>
+			</td>
+		</tr>
+		<tr>
+			<td align="center" style="font-weight:bold">
+				Payment Details
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Payment Date: <%= Date.today.strftime("%d/%m/%y") %>
+				<input type="hidden" value="<%= DateTime.now %>" id="payment_timestamp" name="payment_timestamp">
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Transaction Type
+				<select name="transaction_type" id="transaction_type">
+					<option value="">Select Type</option>	
+				  	<option value="cash">Cash</option>
+				  	<option value="imps">IMPS</option>
+				  	<option value="paymentgateway">PaymentGateway</option>
+				  	<option value="emv">EMV</option>
+				</select>
+				<input type="hidden" id="tid" name="tid">
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Transaction Details <br/>
+				<textarea name="transaction_details" id="transaction_details" placeholder="Enter transaction details here..." class="transaction_area"></textarea>
+			</td>
+		</tr>
+
+		<tr>
+			<td id="button" align="center">
+				<input type="submit" value="Submit">
+			</td>
+		</tr>
+	</table>
+</div>
+	
+
+<script type="text/javascript">
+
+
+$(function() {
+
+    function cb(start, end) {
+        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+	 	$.ajax({
+  			type: "GET",
+           	url: "/dashboard/transaction_range",
+          	data: {from: start.format('YYYY-MM-DD'),to: end.format('YYYY-MM-DD')},
+           	success: function(response){
+           		$(".trans_result").html("");
+				$(".trans_result").html(response);
+			}
+         });
+    }
+    cb(moment().subtract(6, 'month'), moment());
+
+    $('#reportrange').daterangepicker({
+        ranges: {
+           'Today': [moment(), moment()],
+           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+           'This Month': [moment().startOf('month'), moment().endOf('month')],
+           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        }
+    }, cb);
+
+});
+
+
+
+</script>

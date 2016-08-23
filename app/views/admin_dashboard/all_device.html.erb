@@ -1,0 +1,87 @@
+<section>
+    <div class="container">
+      <div class="padding_inner">
+        <h1>Listing All Devices</h1>   
+
+        <!-- For PDF  -->   
+<!--         <div>
+          <%#= form_tag(all_device_pdf_path(format: :pdf), :target=>"_blank", method: :get) do -%>
+            <input type="text" name="start_date" id="start_date" data-provide='datepicker'class="form-control" placeholder="From Date"> To
+            <input type="text" name="end_date" id="end_date" data-provide='datepicker'class="form-control" placeholder="To Date">
+            <%#= submit_tag "Download As PDF", :class=>"btn btn-primary" %>
+          <%#end%>
+          (*For custom report download please provide from date & to date)
+        </div> -->
+        <!-- For PDF Ends --> 
+
+        <div class="merchant_table table-responsive"><!--merchant_table-->
+          <table class="display table text-center" id="all_device" >
+            <thead>
+              <tr>
+                  <th>Device Created On</th>
+                  <th>Terminal Id</th>
+                  <th>Merchant Name</th>
+                  <th>Serial Number</th>
+                  <th>Type</th>
+                  <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @all_device.each do |all_device| %>
+                  <tr>
+                    <td><%= all_device.created_at.to_time.strftime('%d/%m/%Y at %l:%M %p') unless all_device.created_at.nil? %></td>
+                    <td>
+                      <%=link_to all_device.terminal_id,epsadmin_merchant_device_path(all_device.merchant.merchant_uniq_id,all_device.terminal_id) %>
+                    </td>
+                    <td>
+                      <%= all_device.merchant.first_name unless all_device.merchant.blank?%> <%= all_device.merchant.last_name unless all_device.merchant.blank?%>
+                    </td>
+                    <td>
+                      <%= all_device.device_serial_number %>
+                    </td>     
+                    <td>
+                      <%= all_device.device_make %>
+                    </td>     
+                    <td> 
+                      <%= all_device.device_status.upcase unless all_device.device_status.nil? %>
+                    </td>
+                  </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div><!--merchant_table ends-->       
+    </div>
+  </div>
+</section>
+
+<script type="text/javascript">
+
+<% if @all_device.count < 50 %>
+  $(document).ready( function() {
+    $('#all_device').dataTable({
+      "aaSorting": [],
+      "bPaginate": false,  
+      "iDisplayLength": 50,
+      "aLengthMenu": [[50, 100, 150, -1], [50, 100, 150, "All"]]
+    });
+  });
+<% else %>
+  $(document).ready( function() {
+      $('#all_device').dataTable({
+      "aaSorting": [],
+      "bPaginate": true,
+      "iDisplayLength": 50,
+      "aLengthMenu": [[50, 100, 150, -1], [50, 100, 150, "All"]]
+    });
+  });
+<% end %>
+
+  $('#start_date').datepicker({
+    format: 'yyyy/mm/dd'
+  });
+
+  $('#end_date').datepicker({ 
+    format: 'yyyy/mm/dd'
+  });
+
+</script>

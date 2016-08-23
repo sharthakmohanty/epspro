@@ -1,0 +1,104 @@
+<section>
+	<div class="container">
+		<% if !flash[:notice].nil? || !flash[:notice].blank? %>
+			<p class="alert alert-success">
+			    <a title="close" aria-label="close" data-dismiss="alert" class="close" href="#">×</a>
+			    <%= flash[:notice] %>
+			</p>
+		<% end %>
+		<div class="padding_inner">
+	  		<h1>User Management (<%=@epsadmin_user.full_name%>)</h1>	
+	  		<div class="table_outer details_lookup">
+		  		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+				  	<div class="merchant_details">
+				  		<div class="row">			  		
+					  		<table>
+					  			<tr>
+					  				<td>
+					  					Full Name: 
+				  					</td>
+					  				<td><%=@epsadmin_user.full_name%></td>
+					  			</tr>
+					  			<tr>
+					  				<td>
+					  					Email: 
+					  				</td>
+					  				<td><%=@epsadmin_user.email%></td>
+					  			</tr>	
+					  			<tr>
+					  				<td>
+					  					Role: 
+				  					</td>
+					  				<td><%=@epsadmin_user.role%></td>
+					  			</tr>
+					  			<tr>
+					  				<td>
+					  					Disabled: 
+									</td>
+					  				<td>
+					  					<% if @epsadmin_user.disabled == "false" %>
+											Yes
+										<% else %>
+											No
+										<% end %>
+					  				</td>
+					  			</tr>		  					  			
+							</table>
+				  		</div>
+			  		</div>
+			  	</div>
+
+			  	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+				  	<div class="merchant_details business_details user_add_rgt">
+				  		<div class="row">			  		
+					  		<table>
+					  			<tr>
+					  				<td>
+					  					Sign In Count: 
+					  				</td>
+					  				<td><%=@epsadmin_user.sign_in_count%></td>
+					  			</tr>
+					  			<tr>
+					  				<td>
+					  					Currently Logged At: 
+					  				</td>
+					  				<td><%= @epsadmin_user.current_sign_in_at.strftime('%d %b, %Y - %I:%M %p') if @epsadmin_user.current_sign_in_at %></td>
+					  			</tr>	
+					  			<tr>
+					  				<td>
+					  					Last Logged At: 
+					  				</td>
+					  				<td><%= @epsadmin_user.last_sign_in_at.strftime('%d %b, %Y - %I:%M %p') if @epsadmin_user.last_sign_in_at  %></td>
+					  			</tr>
+					  			<tr>
+					  				<td>
+					  					Current Logged Ip: 
+					  				</td>
+					  				<td><%= @epsadmin_user.current_sign_in_ip %></td>
+					  			</tr>
+					  			<tr>
+					  				<td>
+					  					Last Logged Ip:
+					  				</td>
+					  				<td><%= @epsadmin_user.last_sign_in_ip %></td>
+					  			</tr>			  					  			
+							</table>
+				  		</div>
+			  		</div>
+			  	</div>	
+
+			  	<div class="clearfix"></div>			
+		  		<div class="submit_space button_space text-center">
+		  			<%= link_to 'Back', epsadmin_admins_path, :class=>"btn btn-primary"  %>
+					<% if @epsadmin_user.role != "superadmin" %>
+					  	<%= link_to 'Edit', edit_epsadmin_admin_path(@epsadmin_user), :class =>"btn btn-info" %>
+					    <% if @epsadmin_user.sign_in_count <= 3 %>
+					    	<%= link_to 'Remove', epsadmin_admin_path(@epsadmin_user),:class =>"btn btn-danger", method: :delete, data: { confirm: 'Are you sure you want to Remove the User?' } %>
+					    <% end %>
+					<% end %>
+		  		</div>
+		  	</div>
+	  	<!--table_outer ends-->
+		</div>
+	</div>
+</section>

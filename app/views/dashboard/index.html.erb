@@ -1,0 +1,364 @@
+<% @subscription = Subscription.where(:merchant_id => @merchant.id).first %>
+<% @inv_pend = @subscription.invoices.where(:status => "pending")%>
+<section>
+  	<div class="container">
+  	    <% if !flash[:notice].nil? || !flash[:notice].blank? %>
+	      	<p class="alert alert-success">
+          		<a title="close" aria-label="close" data-dismiss="alert" class="close" href="#">×</a>
+          		<%= flash[:notice] %>
+	      	</p>
+	    <% end %>
+	  	<% if !@inv_pend.blank? %>
+			<div class="alert alert-danger" align="center">
+			    <a title="close" aria-label="close" data-dismiss="alert" class="close" href="#">×</a>
+			    <a href="/dashboard/billing">You have pending invoices. Please click here to view the details.</a>
+			</div>
+		<% end %>
+  		<div class="padding_inner">
+	  		<h1>Dashboard</h1>	
+	  		<h3>Pending Transactions</h3>
+	  		<div class="merchant_table table-responsive dashboard_pending">
+		  		<table class="display table text-center" id="merchant_index">
+		  			<thead>
+						<tr>
+							<th>
+								Date
+							</th>
+							<th>
+								Device
+							</th>
+							<th>
+								Invoice
+							</th>
+							<th>
+								Type 
+							</th>
+							<th>
+								Amount
+							</th>
+							<th>
+								Status
+							</th>
+							<th>
+								Details
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<% @transaction.each do |transaction_list| %>
+							<tr>
+								<td>
+									<%= transaction_list.created_at.strftime("%d/%m/%y") unless transaction_list.created_at.nil? %>
+								
+								</td>
+								<td>
+									<%= transaction_list.device.terminal_id  unless transaction_list.device.blank? %>
+								
+								</td>
+								<td>
+									<%= transaction_list.invoice_number unless transaction_list.invoice_number.nil? %>
+								</td>
+								<td>
+									<%= transaction_list.transaction_type unless transaction_list.transaction_type.nil? %>
+								</td>
+								<td>
+									<%= transaction_list.amount unless transaction_list.amount.nil? %>
+								</td>
+								<td>
+									<%= transaction_list.transaction_status.upcase unless transaction_list.transaction_status.nil? %>
+								</td>
+				  				<td>
+				  					<div class="button_device">
+					  					<% if transaction_list.transaction_status == "pending"%>
+											<button type="submit" class="btn btn-success popup" onClick="pop('popDiv')" id="<%=transaction_list.id%>">Paid</button>
+
+								  			<button type="submit" class="btn btn-danger cancel" id="<%=transaction_list.id%>">Cancel</button>
+										<% end %>
+								  	</div>
+							  	</td>
+						  	</tr>
+					  	<% end %>
+					</tbody>				  						  			
+		  		</table>
+		  	</div><!--table ends-->
+
+		  	<div class="dashboard_outer">
+		  		<div class="row">
+		  			<div class="top_space">
+				  		<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">	
+				  			<h3>Transactions Executed In Last 30 Days</h3>
+							<div id="chart" style="width:100%; height:400px;"></div>
+				  		</div>			  		
+				  		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+				  			<h3>Total Transactions In Last 30 Days</h3>
+				  			<div class="green_bg">
+				  				<div><%= get_transaction_count_total(Time.now-1.month,Time.now) %></div>
+				  			</div>
+				  		</div>
+		  				<div class="clearfix"></div>
+		  			</div>
+			  		<div class="top_space">
+				  		<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12"> 
+				  		<h3>Amount Earned In Last 30 Days</h3>
+				  			<div id="chart_amount" style="width:100%; height:400px;">
+				  			</div>
+				  		</div>			  		
+				  		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+				  			<h3>Total Amount Earned In Last 30 Days</h3>
+				  			<div class="green_bg blue_bg">
+				  				<div>
+				  					<div><span>&#8377;</span>
+				  					<%= get_transaction_amount_total(Time.now-1.month,Time.now) %>
+				  					</div>
+				  				</div>
+				  			</div>
+				  		</div>
+			  			<div class="clearfix"></div>
+		  			</div>
+			  	</div>
+		  	</div><!--dashboard_outer ends-->
+		</div>
+  	</div>
+</section> 
+       
+<div id="popDiv" class="ontop">
+	<table cellpadding="4" cellspacing="4" id="popup">
+		<tr>
+			<td align="right">
+				<a title="Click here to close the pop-up" href="#" onClick="hide('popDiv')">X</a>
+			</td>
+		</tr>
+		<tr>
+			<td align="center" style="font-weight:bold">
+				Payment Details
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Payment Date: <%= Date.today.strftime("%d/%m/%y") %>
+				<input type="hidden" value="<%= DateTime.now %>" id="payment_timestamp" name="payment_timestamp">
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Transaction Type
+				<select name="transaction_type" id="transaction_type">
+					<option value="">Select Type</option>	
+				  	<option value="cash">Cash</option>
+				  	<option value="imps">IMPS</option>
+				  	<option value="paymentgateway">PaymentGateway</option>
+				  	<option value="emv">EMV</option>
+				</select>
+				<input type="hidden" id="tid" name="tid">
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Transaction Details <br/>
+				<textarea name="transaction_details" id="transaction_details" placeholder="Enter transaction details here..." class="transaction_area"></textarea>
+			</td>
+		</tr>
+
+		<tr>
+			<td id="button" align="center">
+				<input type="submit" value="Submit">
+			</td>
+		</tr>
+	</table>
+</div>
+
+
+<script type="text/javascript">
+
+	<% if @transaction.count < 50 %>
+	  $(document).ready( function() {
+	    $('#merchant_index').dataTable({
+          	"aaSorting": [],
+	        "bPaginate": false,  
+          	"iDisplayLength": 50,
+          	"aLengthMenu": [[50, 100, 150, -1], [50, 100, 150, "All"]]
+	    });
+	  });
+	<% else %>
+	  $(document).ready( function() {
+	      $('#merchant_index').dataTable({
+          	"aaSorting": [],
+	        "bPaginate": true,
+          	"iDisplayLength": 50,
+          	"aLengthMenu": [[50, 100, 150, -1], [50, 100, 150, "All"]]
+	    });
+	  });
+	<% end %>
+
+
+
+	$(".popup").click(function(){
+		var val = $("#tid").val($(this).attr('id'));
+		$("#transaction_type").val('');
+	    $("#transaction_details").val('');
+	})
+
+	$("#button").click(function() {
+		var check = confirm("Are you sure you want to Pay the Transaction?");
+        if (check == true) {
+		var tid = $("#tid").val();
+		var date = $("#payment_timestamp").val();
+		var type = $("#transaction_type").val();
+		var details = $("#transaction_details").val();
+		if (type != "" && details != ""){
+		   	$.ajax({
+		   	url: "/dashboard/update_transaction",
+		   	type: "POST",
+		   	data: {"date" : date, "type" : type, "details" : details, "tid" : tid},
+		   	dataType: "json",
+		   	success: function(data) {
+		   		alert("Successfully updated the status")
+		        location.reload();
+		     	}
+		   	});
+		}
+		else if (type == "" ){
+			alert("Please select payment type");
+		}
+		else{
+			alert("Please provide the payment details");
+		}
+		}
+	else
+	{
+		$('.ontop').hide();
+		return false;
+
+	}
+
+	});
+
+	function pop(div) {
+		document.getElementById(div).style.display = 'block';
+	}
+	function hide(div) {
+		document.getElementById(div).style.display = 'none';
+	}
+		//To detect escape button
+	document.onkeydown = function(evt) {
+		evt = evt || window.event;
+		if (evt.keyCode == 27) {
+			hide('popDiv');
+		}
+	};
+	
+	$('.cancel').click(function(){
+		var check = confirm("Are you sure you want to Cancel the Transaction?");
+    	if (check == true) {
+	    	var status= $(this).attr('id');
+	    	var cls= $(this).attr('class');
+			$.ajax({
+			type: "GET",
+			url: '/epsadmin/merchants/<%=@merchant.id%>/transaction_status',
+			data: {tid: status,cls: cls},
+			dataType: 'json',
+		 	success: function(data){
+		          	if(data == true){
+		              	alert("Status updated successfully")
+		              	location.reload();
+		          	}
+		          	else{
+		          		return false;
+		          	}
+		        }
+			});
+		}
+		else
+		{
+			return false;
+		}
+    });
+
+	$(function () {
+	    $('#chart').highcharts({
+	        chart: {
+	            type: 'line'
+	        },
+	        title: {
+	            text: 'Monthly Total Transactions'
+	        },
+	        xAxis: {
+	        	type: 'datetime',
+	            dateTimeLabelFormats: { 
+	                month: '%d. %b',
+	                year: '%b'
+	            },
+	            title: {
+	                text: 'Date'
+	            }
+	        },
+	        yAxis: {
+	            title: {
+	                text: 'Number Of Transactions'
+	            },
+	            min: 0
+	        },
+	        tooltip: {
+	            pointFormat: '{point.y:.0f}'
+	        },
+
+	        plotOptions: {
+	            spline: {
+	                marker: {
+	                    enabled: true
+	                }
+	            }
+	        },
+
+	        series: [{
+	            name: 'Transactions',
+	            data: <%= get_transaction_count(Time.now-1.month,Time.now) %>
+	        }]
+	    });
+	});
+
+	$(function () {
+	    $('#chart_amount').highcharts({
+	        chart: {
+	            type: 'line'
+	        },
+	        title: {
+	            text: 'Monthly Earned Transactions'
+	        },
+	        xAxis: {
+	        	type: 'datetime',
+	            dateTimeLabelFormats: { // don't display the dummy year
+	                month: '%d. %b',
+	                year: '%b'
+	            },
+	            title: {
+	                text: 'Date'
+	            }
+	        },
+	        yAxis: {
+	            title: {
+	                text: 'Amount (Rs)'
+	            },
+	            min: 0
+	        },
+	        tooltip: {
+	            pointFormat: 'Rs. {point.y:.0f}'
+	        },
+
+	        plotOptions: {
+	            spline: {
+	                marker: {
+	                    enabled: true
+	                }
+	            }
+	        },
+
+	        series: [{
+	            name: 'Transactions',
+	            data: <%= get_transaction_amount(Time.now-1.month,Time.now) %>
+	        }]
+	    });
+	});
+
+
+</script>

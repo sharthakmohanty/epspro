@@ -1,0 +1,2 @@
+module Epsadmin::AdminsHelper
+end

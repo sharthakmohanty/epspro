@@ -1,0 +1,70 @@
+<section>
+	<div class="container">
+	    <% if !flash[:notice].nil? || !flash[:notice].blank? %>
+      		<p class="alert alert-success">
+		        <a title="close" aria-label="close" data-dismiss="alert" class="close" href="#">×</a>
+		        <%= flash[:notice] %>
+	      	</p>
+	    <% end %>
+		<div class="padding_inner">
+			<h1><%= render_breadcrumbs :separator => ' > ' %></h1>  		
+		  	<div class="pull-right">
+	  			<%= link_to 'Add New Merchant', new_epsadmin_merchant_path, :class => "btn btn-primary" %>
+		  	</div>
+		  	<div class="clearfix"></div>
+			<div class="merchant_table table-responsive">
+				<table id="merchant" class="display table text-center">
+				    <thead>
+					  <tr>
+					    <th>Created On</th>
+					    <th>Merchant ID</th>
+					    <th>Business Name</th>
+					    <th>Name</th>
+					    <th>Phone</th>
+					    <th>Email</th>
+					    <th>Status</th>
+					  </tr>
+				    </thead>
+				    <tbody>
+					  <% @epsadmin_merchants.each do |merchant| %>
+					    <tr>
+					    	<td><%= merchant.created_at.to_time.strftime('%d/%m/%Y at %l:%M %p')unless merchant.created_at.nil? %></td>
+					      	<td align="center"><%= link_to merchant.merchant_uniq_id.upcase, epsadmin_merchant_path(merchant.merchant_uniq_id) %></td>
+				      		<td align="center"><%=merchant.business_name%></td>
+					      	<td align="center"><%=merchant.first_name%>&nbsp;<%=merchant.last_name %></td>
+					      	<td align="center"><%=merchant.phone_number%></td>
+					      	<td align="center"><%=merchant.email_address%></td>
+					      	<td align="center"><%=merchant.status.upcase unless merchant.status.nil? %></td>
+					    </tr>
+					  <% end %>
+					</tbody>
+				</table>
+		  	</div><!--merchant_table ends-->
+		</div>
+  	</div>
+</section>
+
+
+<script type="text/javascript">
+
+<% if @epsadmin_merchants.count < 50 %>
+ 	$(document).ready( function() {
+		$('#merchant').dataTable({
+			"aaSorting": [],
+		    "bPaginate": false,  
+	        "iDisplayLength": 50,
+	        "aLengthMenu": [[50, 100, 150, -1], [50, 100, 150, "All"]]
+		});
+	});
+<% else %>
+	$(document).ready( function() {
+	  	$('#merchant').dataTable({
+	  		"aaSorting": [],
+	    	"bPaginate": true,
+	        "iDisplayLength": 50,
+	        "aLengthMenu": [[50, 100, 150, -1], [50, 100, 150, "All"]]
+		});
+	});
+<% end %>
+
+</script>

@@ -1,0 +1,108 @@
+<section>
+	<div class="container">
+	    <% if !flash[:notice].nil? || !flash[:notice].blank? %>
+	      	<p class="alert alert-success">
+	        	<a title="close" aria-label="close" data-dismiss="alert" class="close" href="#">×</a>
+	        	<%= flash[:notice] %>
+	      	</p>
+	    <% end %>
+		<div class="padding_inner details_lookup">
+  		<h1><%= render_breadcrumbs :separator => ' > ' %>  > <%= @epsadmin_transaction_indiv.invoice_number %></h1>
+	  		<div class="tab_menu">
+	  			<ul>
+	  				<li><%=link_to "Details",epsadmin_merchant_path(@transc_merchant.merchant_uniq_id)  %></li>
+	  				<li><%=link_to "Devices",epsadmin_merchant_devices_path(@transc_merchant.merchant_uniq_id)%></li>
+	  				<li><%= link_to 'Transactions', epsadmin_merchant_transaction_path(@transc_merchant.merchant_uniq_id), :class=>"active"%></li>
+	  				<li><%= link_to 'Invoices', epsadmin_merchant_invoices_path(@transc_merchant.merchant_uniq_id) %></li>
+	  			</ul>
+	  			<div class="clearfix"></div>
+	  		</div>
+  			<div class="clearfix"></div>
+	  		<!--tab_menu ends-->	
+	  		<div class="table_outer">
+		  		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+				  	<div class="merchant_details">
+				  		<div class="row">			  		
+					  		<table>
+					  			<tr>
+					  				<td>
+					  					Device Terminal Id: 
+					  				</td>
+					  				<td><%=@epsadmin_transaction_indiv.device.terminal_id%></td>
+					  			</tr>
+								<tr>
+					  				<td>
+					  					Invoice Number: 
+					  				</td>
+					  				<td><%=@epsadmin_transaction_indiv.invoice_number%></td>
+					  			</tr>
+					  			<tr>
+					  				<td>
+					  					Amount: 
+					  				</td>
+					  				<td><%=@epsadmin_transaction_indiv.amount%></td>
+					  			</tr>	
+					  			<tr>
+					  				<td>
+					  					Transaction Type: 
+					  				</td>
+					  				<td><%=@epsadmin_transaction_indiv.transaction_type%></td>
+					  			</tr>  					  			
+							</table>
+				  		</div>
+			  		</div>
+			  	</div>
+
+			  	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+				  	<div class="merchant_details">
+				  		<div class="row">			  		
+					  		<table>
+					  			<tr>
+					  				<td>
+					  					Transaction Details: 
+					  				</td>
+					  				<td><%= @epsadmin_transaction_indiv.transaction_details %></td>
+					  			</tr>	
+					  			<tr>
+					  				<td>
+			  							Status: 
+			  						</td>
+			  						<td>
+			  									<%= @epsadmin_transaction_indiv.transaction_status.upcase unless @epsadmin_transaction_indiv.transaction_status.nil? %>
+			  								</b>
+		  							
+			  						</td>
+					  			</tr>		
+					  			<tr>
+					  				<td>
+					  					Transaction Timestamp: 
+									</tdpopup>
+					  				<td>
+					  				<%= @epsadmin_transaction_indiv.transaction_timestamp.strftime("%d %b %Y") +" at "  unless @epsadmin_transaction_indiv.transaction_timestamp.blank?%>     <%= @epsadmin_transaction_indiv.transaction_timestamp.strftime("%l:%M %P") unless @epsadmin_transaction_indiv.transaction_timestamp.blank?%></td>
+					  			</tr>
+					  			<tr>
+					  				<td>
+					  					Payment Timestamp: 
+					  				</td>
+					  				<td>
+					  					<%= @epsadmin_transaction_indiv.payment_timestamp.strftime("%d %b %Y") +" at "unless @epsadmin_transaction_indiv.payment_timestamp.blank?%>       <%= @epsadmin_transaction_indiv.payment_timestamp.strftime("%l:%M %P") unless @epsadmin_transaction_indiv.payment_timestamp.blank?%>
+
+					  				</td>
+					  			</tr>	  					  			
+							</table>
+				  		</div>
+		  			</div>
+			  	</div>
+
+	  			<div class="clearfix"></div>			
+	  			<div class="submit_space button_space text-center">
+	  			<%= link_to 'Back', epsadmin_merchant_transaction_path, :class=>"btn btn-primary"  %>
+					
+			  	</div>
+
+			
+	  		</div><!--table_outer ends-->
+		</div>
+	</div>
+</section> 
+

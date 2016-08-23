@@ -1,0 +1,151 @@
+<%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+<%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+<section class="invoice_print">
+	<div class="container">
+		<div class="col-lg-2 col-md-2 col-sm-1 col-xs-12 logo">
+		  			<a href="#" class="logo_txt">Logo</a>
+		  		</div>
+		<div class="padding_inner details_lookup">
+	  
+	  		<div class="clearfix"></div><!--tab_menu ends-->	
+
+	  		<div class="table_outer"> 				  	
+			 	<div class="padding_inner">
+	  			<div class="clearfix"></div>
+	  			<div class="invoice_bg" style="font-size: 10px !important;">
+	  				<div class="pull-left">
+	  				<b>Invoice #<%=@epsadmin_invoice.invoice_number%></b><br>
+					<b>Invoice Date:</b> <%=@epsadmin_invoice.invoice_date.strftime("%d/%m/%y") unless @epsadmin_invoice.invoice_date.nil? %>
+					</div>
+					<div class="pull-right">
+	  				<b>Invoice Type:<%= @epsadmin_invoice.invoice_type %></b><br>
+					<b>Status:</b> <% if @epsadmin_invoice.status == "paid" %>
+				  							<b class="active">
+			  									<%= @epsadmin_invoice.status.upcase unless @epsadmin_invoice.status.nil? %>
+			  								</b>
+		  								<% else %>
+											<b class="pending">
+			  									<%= @epsadmin_invoice.status.upcase unless @epsadmin_invoice.status.nil? %>
+			  								</b>
+		  								<% end %><br>
+					<b>Associated Device(Terminal Id): <% if !@epsadmin_invoice.device.blank? %>
+					  						<%= @epsadmin_invoice.device.terminal_id %>
+				  						<% else %>
+				  							N/A
+				  						<% end %></b>
+					</div>
+					<div class="clearfix"></div>
+	  			</div>
+	  			<div class="flipper_dtl" style="font-size: 10px !important;">
+	  				<b>Invoiced To</b><br>
+					<%=@epsadmin_invoice.business_name%><br>
+					<%=@epsadmin_invoice.address%>
+	  			</div>
+	  		<div class="merchant_table table-responsive invoice_new_tbl">
+	  				<table>
+	  					<tr>
+							<th colspan="3" style="font-size: 10px !important;">Description</th>
+							<th style="font-size: 10px !important;">Amount</th>						
+						</tr>
+						<%@epsadmin_invoice.invoice_line_items.each do |i|%>
+						<tr>
+							<td colspan="3" style="font-size: 10px !important;">
+								<%=i.description%>
+							</td>
+							<td style="font-size: 10px !important;"><%=i.amount%></td>
+						</tr>
+						<% end %>
+						<tr class="right_align_txt">
+							<td colspan="3" style="font-size: 10px !important;">Sub Total</td>
+							<td style="font-size: 10px !important;"><%=@epsadmin_invoice.invoice_amount - @epsadmin_invoice.tax%></td>
+						</tr>
+						<tr class="right_align_txt">
+							<td colspan="3" style="font-size: 10px !important;">Tax</td>
+							<td style="font-size: 10px !important;"><%= @epsadmin_invoice.tax %></td>
+						</tr>
+						<tr class="right_align_txt">
+							<td colspan="3" style="font-size: 10px !important;">Total</td>
+							<td style="font-size: 10px !important;"><%=@epsadmin_invoice.invoice_amount%></td>
+						</tr>
+	  				</table>
+	  			</div>
+	  			
+	  			<% if @epsadmin_invoice.status == "paid" %>
+	  			<h3 style="font-size: 10px !important;font-weight: bold !important;"> Invoices Details</h3>
+	  			<div class="merchant_table table-responsive transact_nw_tbl">
+	  				<table class="text-center">
+		  				<tr>
+		  					<th style="font-size: 10px !important;">Paid Date </th>
+		  					<th style="font-size: 10px !important;">Payment Details </th>
+		  					<th style="font-size: 10px !important;">Paid Via</th>
+		  				</tr>
+		  				<tr>
+		  					<td style="font-size: 10px !important;"><%= @epsadmin_invoice.paid_date.strftime("%d/%m/%y") unless @epsadmin_invoice.paid_date.blank?%></td>
+		  					<td style="font-size: 10px !important;"><%= @epsadmin_invoice.payment_details %></td>
+		  					<td style="font-size: 10px !important;"><%= @epsadmin_invoice.paid_via.split("_").map { |i| i.capitalize }.join(' ') unless @epsadmin_invoice.paid_via.nil? %></td>
+		  					
+		  				</tr>
+	  				</table>
+	  			</div>
+	  			<% elsif @epsadmin_invoice.status == "waived" || @epsadmin_invoice.status == "cancelled"%>
+	  			<h3 style="font-size: 10px !important;font-weight: bold !important;"> Invoices Details</h3>
+	  			<div class="merchant_table table-responsive transact_nw_tbl">
+	  				<table class="text-center">
+	  				<tr>
+	  					<th style="font-size: 10px !important;">Remarks </th>
+	  				</tr>
+	  				<tr>
+	  					<td style="font-size: 10px !important;"><%= @epsadmin_invoice.remarks %></td>
+	  				</tr>
+	  				</table>
+	  			</div>
+	  			<% end %>
+	</div>
+			  	<div class="clearfix"></div>			  	
+			 
+			  
+			</div>
+		</div>
+	</div>
+</section>
+<style>
+.active
+{
+	 color: green !important;
+    font-weight: bold !important;
+}
+.pending {
+    color: red !important;
+    font-weight: bold !important;
+}
+.logo_txt
+{
+ color: #1f8891 !important;
+ letter-spacing: 0px !important;
+}
+.invoice_bg {
+    background-color: #f7f7f7 !important;
+
+    line-height: 20px !important;
+    padding: 15px !important;
+}
+.invoice_new_tbl th:last-child
+{
+ border-left: 1px solid #dedede !important;
+ 
+}
+.invoice_new_tbl tr:nth-child(2n+1)
+{
+ background-color: transparent !important;
+
+}
+.invoice_new_tbl tr.right_align_txt, .invoice_new_tbl th
+{
+ background-color: #f9f9f9 !important;
+}
+.flipper_dtl
+{
+	line-height: 20px !important;
+}
+
+</style>

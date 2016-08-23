@@ -1,0 +1,302 @@
+<table>
+	<tr>
+		<td>
+			Dear <%= @merchant.first_name%> <%= @merchant.last_name%>
+		</td>
+	</tr>
+	<tr><td></td></tr>
+	<tr>
+		<td>
+			Greetings from EPS, your payments partner. Please find below the weekly summary of transactions executed via EPS. The stats give you an idea of how you are using our system.
+		</td>
+	</tr>
+	<tr><td></td></tr>
+	<tr>
+		<td style="font-weight: bold;">
+			Merchant Name: <%= @merchant.first_name%> <%= @merchant.last_name%>
+		</td>
+	</tr>
+	<tr>
+		<td style="font-weight: bold;">
+			Merchant ID: <%= @merchant.merchant_uniq_id %>
+		</td>
+	</tr>
+	<tr>
+		<td style="font-weight: bold;">
+			Business Name: <%= @merchant.business_name %>
+		</td>
+	</tr>
+	<tr>
+		<td style="font-weight: bold;">
+			Status: Active and Published
+		</td>
+	</tr>
+	<tr>
+		<td style="font-weight: bold;">
+			Industry Type: <%= @merchant.industry_type %>
+		</td>
+	</tr>
+	<tr>
+		<td style="font-weight: bold;">
+			Registered On: <%= @merchant.created_at.to_time.strftime('%d/%m/%Y at %l:%M %p') %>
+		</td>
+	</tr>
+	<tr>
+		<td style="font-weight: bold;">
+			Report Period: <%= (Time.now - 7.days).strftime("%d-%b-%Y") %> - <%= Time.now.strftime("%d-%b-%Y") %>
+		</td>
+	</tr>
+</table><br/><br/>
+	 	 
+
+<div> <b>Overall Transactions</b></div><br/><br/>
+<%
+	@total_no = []
+	@total_amt = []
+	@paid_no = []
+	@paid_amt = []
+	@cancel_no = []
+	@cancel_amt = []
+	@declined_no = []
+	@declined_amt = []
+	@pending_no = []
+	@pending_amt = []
+%>
+<% if !@merchant.devices.nil? && !@merchant.devices.blank? %>
+	<% @merchant.devices.where(:device_status => "active").each do |d| %>
+	<%
+	    if !d.nil? && !d.blank?
+			t = d.transactions
+		    @total_no << t.where(:created_at.gte => (Time.now - 7.days), :created_at.lte => Time.now).count
+		    @total_amt << t.where(:created_at.gte => (Time.now - 7.days), :created_at.lte => Time.now).collect{|x|x.amount}.inject(:+)
+		    @paid_no << t.where(:transaction_status => "paid", :created_at.gte => (Time.now - 7.days), :created_at.lte => Time.now).count
+		    @paid_amt << t.where(:transaction_status => "paid", :created_at.gte => (Time.now - 7.days), :created_at.lte => Time.now).collect{|x|x.amount}.inject(:+)
+		    @cancel_no << t.where(:transaction_status => "cancelled", :created_at.gte => (Time.now - 7.days), :created_at.lte => Time.now).count
+		    @cancel_amt << t.where(:transaction_status => "cancelled", :created_at.gte => (Time.now - 7.days), :created_at.lte => Time.now).collect{|x|x.amount}.inject(:+)
+		    @declined_no << t.where(:transaction_status => "declined", :created_at.gte => (Time.now - 7.days), :created_at.lte => Time.now).count
+		    @declined_amt << t.where(:transaction_status => "declined", :created_at.gte => (Time.now - 7.days), :created_at.lte => Time.now).collect{|x|x.amount}.inject(:+)
+		    @pending_no << t.where(:transaction_status => "pending", :created_at.gte => (Time.now - 7.days), :created_at.lte => Time.now).count
+		    @pending_amt << t.where(:transaction_status => "pending", :created_at.gte => (Time.now - 7.days), :created_at.lte => Time.now).collect{|x|x.amount}.inject(:+)
+		end
+	%>
+	<% end %>
+<% end %>
+
+<% @tot_no = @total_no.inject(0){|sum,x| sum + x } %>
+
+<% @tot_amt = @total_amt.compact.inject(:+) %>
+
+<% @pay_no = @paid_no.inject(0){|sum,x| sum + x } %>
+
+<% @pay_amt = @paid_amt.compact.inject(:+)%>
+
+<% @can_no = @cancel_no.inject(0){|sum,x| sum + x }  %>
+
+<% @can_amt = @cancel_amt.compact.inject(:+) %>
+
+<% @dec_no = @declined_no.inject(0){|sum,x| sum + x } %>
+
+<% @dec_amt = @declined_amt.compact.inject(:+) %>
+
+<% @pend_no = @pending_no.inject(0){|sum,x| sum + x } %>
+
+<% @pend_amt = @pending_amt.compact.inject(:+) %>
+
+<table cellspacing="2" cellpadding="2" border="1">
+	<tr>
+		<td>
+			Type
+		</td>
+		<td>
+			Total
+		</td>
+		<td>
+			Paid
+		</td>
+		<td>
+			Cancelled
+		</td>
+		<td>
+			Declined
+		</td>
+		<td>
+			Pending/Timeout
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Number of Transactions in the Period
+		</td>
+		<td>
+			<%= @tot_no %>
+		</td>
+		<td>
+			<%= @pay_no %>
+		</td>
+		<td>
+			<%= @can_no %>
+		</td>
+		<td>
+			<%= @dec_no %>
+		</td>
+		<td>
+			<%= @pend_no %>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Total Amount Of Transactions during the Period
+		</td>
+		<td>
+			<%= @tot_amt %>
+		</td>
+		<td>
+			<%= @pay_amt %>
+		</td>
+		<td>
+			<%= @can_amt %>
+		</td>
+		<td>
+			<%= @dec_amt %>
+		</td>
+		<td>
+			<%= @pend_amt %>
+		</td>
+	</tr>
+</table>
+<div><b>Total Amount Earned during this Period (&#8377;) <%= @pay_amt %></b></div> <br/><br/>
+
+
+<div><b>Transactions Per Device</b></div><br/>
+
+<% @merchant.devices.where(:device_status => "active").each do |d| %>
+
+<table>
+
+	<tr>
+		<td>
+			Terminal ID:<%= d.terminal_id %>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Device Serial Number:<%=d.device_serial_number%>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Device Make:<%=d.device_make%>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Device Alloted on: <%= d.created_at.strftime("%d-%b-%Y") %>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Device Phone Number:<%=d.sim_phone_number%>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Device MMID: <%=d.bank_mmid%>
+		</td>
+	</tr>
+</table><br/>
+
+<table cellspacing="2" cellpadding="2" border="1">
+	<tr>
+		<td>
+			Type
+		</td>
+		<td>
+			Total
+		</td>
+		<td>
+			Paid
+		</td>
+		<td>
+			Cancelled
+		</td>
+		<td>
+			Declined
+		</td>
+		<td>
+			Pending/Timeout
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Numbers
+		</td>
+		<td>
+			<%=d.transactions.where(:device_id => d.id, :created_at.gte => (Time.now - 7.days), :created_at.lte => Time.now).count%>
+		</td>
+		<td>
+			<%=d.transactions.where(:transaction_status => "paid", :device_id => d.id, :created_at.gte => (Time.now - 7.days), :created_at.lte => Time.now).count%>
+		</td>
+		<td>
+		  <%=d.transactions.where(:transaction_status => "cancelled", :device_id => d.id, :created_at.gte => (Time.now - 7.days), :created_at.lte => Time.now).count%>
+
+		</td>
+		<td>
+			<%=d.transactions.where(:transaction_status => "declined", :device_id => d.id, :created_at.gte => (Time.now - 7.days), :created_at.lte => Time.now).count%>
+
+		</td>
+		<td>
+			<%=d.transactions.where(:transaction_status => "pending", :device_id => d.id, :created_at.gte => (Time.now - 7.days), :created_at.lte => Time.now).count%>
+
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Amount
+		</td>
+		<td>
+			<%=d.transactions.where(:device_id => d.id, :created_at.gte => (Time.now - 7.days), :created_at.lte => Time.now).collect{|x|x.amount}.inject(:+)%>
+		</td>
+		<td>
+			<%=d.transactions.where(:transaction_status => "paid", :device_id => d.id, :created_at.gte => (Time.now - 7.days), :created_at.lte => Time.now).collect{|x|x.amount}.inject(:+)%>
+		</td>
+		<td>
+		<%=d.transactions.where(:transaction_status => "cancelled", :device_id => d.id, :created_at.gte => (Time.now - 7.days), :created_at.lte => Time.now).collect{|x|x.amount}.inject(:+)%>
+
+		</td>
+		<td>
+			<%=d.transactions.where(:transaction_status => "declined", :device_id => d.id, :created_at.gte => (Time.now - 7.days), :created_at.lte => Time.now).collect{|x|x.amount}.inject(:+)%>
+		</td>
+		<td>
+        <%=d.transactions.where(:transaction_status => "pending", :device_id => d.id, :created_at.gte => (Time.now - 7.days), :created_at.lte => Time.now).collect{|x|x.amount}.inject(:+)%>
+		</td>
+	</tr>
+</table><br/>
+
+<div style="padding-bottom: 10px;"><b>Total Amount Earned : </b><%=d.transactions.where(:transaction_status => "paid", :device_id => d.id, :created_at.gte => (Time.now - 7.days), :created_at.lte => Time.now).collect{|x|x.amount}.inject(:+)%></div>
+
+<%end%>
+
+<table cellspacing="2" cellpadding="2">
+	<tr style="padding-top: 20px;">
+		<td>
+			Detailed Stats are available at <a href="http://eps.heurion.com/dashboard/index">My Dashboard</a>
+			 
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Do let us know if you have any clarifications on the same. You can write to us on support@eps.heurion.com.
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Until Next week.
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Thanks and Regards <br/>
+			EPS Team 
+		</td>
+	</tr>
+</table>

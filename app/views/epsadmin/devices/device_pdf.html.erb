@@ -1,0 +1,81 @@
+<%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+<%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Device Details</title>
+  </head>
+    <body>
+      <table style="width:70%;margin:auto;font-family:arial;font-size:14px;">
+        <tr>
+          <td style="text-align:center;">
+            <h1 style="margin:0px;padding:10px 0px;">Device Details</h1>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div>
+              <table style="width:40%;line-height:30px;">       
+                <tr>
+                  <td>Device Owner Name :</td>
+                  <td><%= @merchant.first_name %> <%= @merchant_id.last_name %></td>
+                </tr>
+                <tr>
+                  <td>Business Name :</td>
+                  <td><%= @merchant.business_name %></td>
+                </tr>
+                <tr>
+                  <td>Business Address :</td>
+                  <td><%= @merchant.business_address %></td>
+                </tr>
+                <tr>
+                  <td>Contact Number :</td>
+                  <td><%= @merchant.phone_number %></td>
+                </tr>
+                <tr>
+                  <td>Email ID :</td>
+                  <td><%= @merchant.email_address %></td>
+                </tr>
+              </table>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="details_dev">
+              <table cellpadding="0" cellspacing="0" style="width:100%;text-align:center;">
+                <tr style="background-color:#eee;">
+                  <th>Created On</th>
+                  <th>Terminal ID</th>
+                  <th>Phone Number</th>
+                  <th>Serial Number</th>
+                  <th>Device Make</th>
+                  <th>Device Status</th>
+                </tr>
+                  <% @epsadmin_devices.each do |device| %>
+                    <tr>
+                      <td><%= device.created_at.to_time.strftime('%d/%m/%Y') unless device.created_at.nil? %></td>
+                      <td><%= device.terminal_id %></td>
+                      <td><%=device.sim_phone_number%> </td>    
+                      <td><%=device.device_serial_number%></td>
+                      <td><%=device.device_make%></td>
+                      <td><%= device.device_status.upcase unless device.device_status.nil? %></td>
+                    </tr>
+                  <% end %> 
+              </table>
+            </div>
+          </td>
+        </tr>
+      </table>
+
+      <style type="text/css">
+        .details_dev{margin-top: 15px;}
+        .details_dev table{border:1px solid #ddd;}
+        .details_dev th{padding:12px 0px;border-left:1px solid #ddd;border-bottom:1px solid #ddd;}
+        .details_dev td{padding:12px 0px;border-left:1px solid #ddd;}
+        .details_dev th:first-child, .details_dev td:first-child{border-left:none;}
+        .details_dev tr:nth-child(2n+1) td{background-color: #eff0f1;}
+      </style>
+    </body>
+  </html>
+</style>

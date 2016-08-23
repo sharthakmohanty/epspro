@@ -1,0 +1,104 @@
+<section>
+    <div class="container">
+      <% if !flash[:notice].nil? || !flash[:notice].blank? %>
+        <p class="alert alert-success">
+          <a title="close" aria-label="close" data-dismiss="alert" class="close" href="#">×</a>
+          <%= flash[:notice] %>
+        </p>
+      <% end %>
+      <div class="padding_inner">
+        <h1><%= render_breadcrumbs :separator => ' > ' %> > Invoices</h1>
+        <div class="tab_menu">
+          <ul>
+            <li>
+              <%= link_to "Details",epsadmin_merchant_path(@merchant.merchant_uniq_id) %>
+            </li>
+            <li>
+              <%= link_to "Devices",epsadmin_merchant_devices_path(@merchant.merchant_uniq_id) %>
+            </li>
+            <li>
+              <%= link_to 'Transactions', epsadmin_merchant_transaction_path(@merchant.merchant_uniq_id) %>
+            </li>
+            <li>
+              <%= link_to 'Invoices', epsadmin_merchant_invoices_path(@merchant.merchant_uniq_id), :class=>"active" %>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <!--tab_menu ends--> 
+
+        <!-- For PDF -->
+<!--         <div class="pull-left">
+          <%#= form_tag(epsadmin_merchant_invoice_pdf_path(format: :pdf), :target=>"_blank", method: :get) do -%>
+            <input type="text" name="start_date" id="start_date" data-provide='datepicker'class="form-control" placeholder="From Date"> To
+            <input type="text" name="end_date" id="end_date" data-provide='datepicker'class="form-control" placeholder="To Date">
+            <%#= submit_tag "Download As PDF", :class=>"btn btn-primary" %>
+          <%#end%>
+          (*For custom report download please provide from date & to date)
+        </div> -->
+        <!-- For PDF End -->
+ 
+        <div class="pull-right">
+          <%= link_to 'Add New Invoice', new_epsadmin_merchant_invoice_path, :class=>"btn btn-primary" %>
+        </div>          
+        <div class="clearfix"></div>    
+        <!--merchant_table-->
+        <div class="merchant_table table-responsive">
+          <table class="display table text-center" id="invoice">
+              <thead>
+              <tr>
+                <th>Date</th>
+                <th>Invoice Id</th>
+                <th>Amount</th>
+                <th>Type</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @epsadmin_invoices.each do |invoice| %>
+                <tr>
+                    <td><%= invoice.created_at.to_time.strftime('%d/%m/%Y at %l:%M %p') unless invoice.created_at.nil? %></td>
+                    <td><%= link_to invoice.invoice_number, epsadmin_merchant_invoice_path(@merchant.merchant_uniq_id,invoice.invoice_number)%></td>
+                    <td><%= invoice.invoice_amount %></td>
+                    <td><%= invoice.invoice_type.upcase unless invoice.invoice_type.nil? %></td>
+                    <td><%= invoice.status.upcase unless invoice.status.nil? %></td>
+                </tr>
+              <% end %>
+            </tbody>            
+          </table>  
+        </div><!--merchant_table ends--> 
+    </div>
+  </div>
+</section> 
+
+<script type="text/javascript">
+
+<% if @epsadmin_invoices.count < 50 %>
+  $(document).ready( function() {
+    $('#invoice').dataTable({
+      "aaSorting": [],
+      "bPaginate": false,  
+      "iDisplayLength": 50,
+      "aLengthMenu": [[50, 100, 150, -1], [50, 100, 150, "All"]]
+    });
+  });
+<% else %>
+  $(document).ready( function() {
+    $('#invoice').dataTable({
+      "aaSorting": [],
+      "bPaginate": true,
+      "iDisplayLength": 50,
+      "aLengthMenu": [[50, 100, 150, -1], [50, 100, 150, "All"]]
+    });
+  });
+<% end %>
+
+  $('#start_date').datepicker({
+    format: 'yyyy/mm/dd'
+  });
+
+  $('#end_date').datepicker({ 
+    format: 'yyyy/mm/dd'
+  });
+
+</script>

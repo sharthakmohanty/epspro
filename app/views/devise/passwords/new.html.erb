@@ -1,0 +1,23 @@
+<section>
+  <div class="container">
+    <% if !flash[:notice].nil? || !flash[:notice].blank? %>
+      <p class="alert alert-success">
+        <a title="close" aria-label="close" data-dismiss="alert" class="close" href="#">×</a>
+        <%= flash[:notice] %>
+      </p>
+    <% end %>
+    <div class="padding_inner">
+      <h1>Forgot your password?</h1> 
+      	<div class="login_div text-center change_password">
+	      	<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+	          	<div class="error_msg"><%= devise_error_messages! %></div>
+	          	<div class="form-group">
+		            <%= f.email_field :email, :class =>"form-control", :placeholder =>"Enter your email id", autofocus: true %>
+	          	</div>
+	          	<%= f.submit "Send me reset password instructions", :class =>"btn btn-success"  %>
+	      	<% end %>
+	      	<div class="text-center forgot_pass forgot_links"><%= render "devise/shared/links" %></div> 
+      	</div>
+    </div>
+  </div>
+</section>

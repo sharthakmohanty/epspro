@@ -1,0 +1,62 @@
+<%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+<%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>All Invoice Lists</title>
+  </head>
+    <body>
+      <table style="width:70%;margin:auto;font-family:arial;font-size:14px;">
+        <tr>
+          <td style="text-align:center;">
+            <h1 style="margin:0px;padding:10px 0px;">All Invoice Lists</h1>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="details_dev">
+              <table cellpadding="0" cellspacing="0" style="width:100%;text-align:center;">
+                <tr style="background-color:#eee;">
+			  		<th>Date</th>
+				  	<th>Invoice Id</th>
+				  	<th>Amount</th>
+				  	<th>Type</th>
+				  	<th>status</th>
+                </tr>
+                  <% @all_invoice.each do |invoice| %>
+					    <tr>
+						    <td>
+						    	<%= invoice.invoice_date.strftime("%d/%m/%y") unless invoice.invoice_date.nil? %>
+					    	</td>
+					      	<td>
+					      		<%= invoice.invoice_number %>
+					  		</td>
+						    <td>
+						    	<%= invoice.invoice_amount %>
+					    	</td>
+						    <td>
+						    	<%= invoice.invoice_type %>
+					    	</td>
+						    <td>
+						    	<%= invoice.status.upcase unless invoice.status.nil? %>
+					    	</td>
+					    </tr>
+				  	<% end %> 
+              </table>
+            </div>
+          </td>
+        </tr>
+      </table>
+
+      <style type="text/css">
+        .details_dev{margin-top: 15px;}
+        .details_dev table{border:1px solid #ddd;}
+        .details_dev th{padding:12px 0px;border-left:1px solid #ddd;border-bottom:1px solid #ddd;}
+        .details_dev td{padding:12px 0px;border-left:1px solid #ddd;}
+        .details_dev th:first-child, .details_dev td:first-child{border-left:none;}
+        .details_dev tr:nth-child(2n+1) td{background-color: #eff0f1;}
+      </style>
+    </body>
+  </html>
+</style>
+

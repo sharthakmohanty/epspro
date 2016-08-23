@@ -1,0 +1,63 @@
+<%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+<%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>All Device Lists</title>
+  </head>
+    <body>
+      <table style="width:70%;margin:auto;font-family:arial;font-size:14px;">
+        <tr>
+          <td style="text-align:center;">
+            <h1 style="margin:0px;padding:10px 0px;">All Device Lists</h1>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="details_dev">
+              <table cellpadding="0" cellspacing="0" style="width:100%;text-align:center;">
+                <tr style="background-color:#eee;">
+                  <th>Device Created On</th>
+                  <th>Terminal Id</th>
+                  <th>Merchant Name</th>
+                  <th>Serial Number</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                </tr>
+                  <% @all_device.each do |all_device| %>
+                    <tr>
+                      <td><%= all_device.created_at.to_time.strftime('%d/%m/%Y at %l:%M %p') unless all_device.created_at.nil? %></td>
+                      <td>
+                        <%= all_device.terminal_id %>
+                      </td>
+                      <td>
+                        <%= all_device.merchant.first_name unless all_device.merchant.blank?%> <%= all_device.merchant.last_name unless all_device.merchant.blank?%>
+                      </td>
+                      <td>
+                        <%= all_device.device_serial_number %>
+                      </td>     
+                      <td>
+                        <%= all_device.device_make %>
+                      </td>     
+                      <td> 
+                        <%= all_device.device_status.upcase unless all_device.device_status.nil? %>
+                      </td>
+                    </tr>
+                <% end %> 
+              </table>
+            </div>
+          </td>
+        </tr>
+      </table>
+
+      <style type="text/css">
+        .details_dev{margin-top: 15px;}
+        .details_dev table{border:1px solid #ddd;}
+        .details_dev th{padding:12px 0px;border-left:1px solid #ddd;border-bottom:1px solid #ddd;}
+        .details_dev td{padding:12px 0px;border-left:1px solid #ddd;}
+        .details_dev th:first-child, .details_dev td:first-child{border-left:none;}
+        .details_dev tr:nth-child(2n+1) td{background-color: #eff0f1;}
+      </style>
+    </body>
+  </html>
+</style>

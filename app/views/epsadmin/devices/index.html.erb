@@ -1,0 +1,110 @@
+
+<section>
+  <div class="container">
+    <% if !flash[:notice].nil? || !flash[:notice].blank? %>
+      <p class="alert alert-success">
+        <a title="close" aria-label="close" data-dismiss="alert" class="close" href="#">×</a>
+        <%= flash[:notice] %>
+      </p>
+    <% end %>
+    <div class="padding_inner">
+        <h1><%= render_breadcrumbs :separator => ' > ' %> > Devices</h1>
+        <div class="tab_menu">
+          <ul>
+            <li>
+              <%= link_to "Details",epsadmin_merchant_path(@merchant.merchant_uniq_id) %>
+            </li>
+            <li>
+              <%= link_to "Devices",epsadmin_merchant_devices_path(@merchant.merchant_uniq_id) , :class=>"active"%>
+            </li>
+            <li>
+              <%= link_to 'Transactions', epsadmin_merchant_transaction_path(@merchant.merchant_uniq_id) %>
+            </li>
+            <li>
+              <%= link_to 'Invoices', epsadmin_merchant_invoices_path(@merchant.merchant_uniq_id) %>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <!--tab_menu ends--> 
+
+        <!-- For PDF -->
+<!--         <div class="pull-left">
+          <%#= form_tag(epsadmin_merchant_device_pdf_path(format: :pdf), :target=>"_blank", method: :get) do -%>
+            <input type="text" name="start_date" id="start_date" data-provide='datepicker'class="form-control" placeholder="From Date"> To
+            <input type="text" name="end_date" id="end_date" data-provide='datepicker'class="form-control" placeholder="To Date">
+            <%#= submit_tag "Download As PDF", :class=>"btn btn-primary" %>
+          <%#end%>
+          (*For custom report download please provide from date & to date)
+        </div> -->
+        <!-- For PDF Ends -->
+
+        <div class="pull-right">
+            <%= link_to 'Add New Device', new_epsadmin_merchant_device_path,:class=>"btn btn-primary", :disabled => false if is_device_addable?(@merchant.status) %>
+        </div>          
+        <div class="clearfix"></div>    
+        <!--merchant_table-->
+        <div class="merchant_table table-responsive">
+          <table class="display table text-center" id="device">
+            <thead>
+              <tr>
+                <th>Device Created On</th>
+                <th>Terminal ID</th>
+                <th>Phone Number</th>
+                <th>Serial Number</th>
+                <th>Device Make</th>
+                <th>Device Status</th>
+              </tr>
+          </thead>
+            <tbody>
+              <% @epsadmin_devices.each do |device| %>
+                <tr>
+                  <td><%= device.created_at.to_time.strftime('%d/%m/%Y at %l:%M %p') unless device.created_at.nil? %></td>
+                  <td><%=link_to device.terminal_id,epsadmin_merchant_device_path(@merchant.merchant_uniq_id,device.terminal_id) %></td>
+                  <td><%=device.sim_phone_number%> </td>    
+                  <td><%=device.device_serial_number%></td>
+                  <td><%=device.device_make%></td>
+                  <td><%= device.device_status.upcase unless device.device_status.nil? %></td>
+                </tr>
+              <% end %>
+            </tbody>            
+          </table>
+        </div>
+        <!--merchant_table ends--> 
+    </div>
+  </div>
+</section> 
+   
+
+<script type="text/javascript">
+
+  <% if @epsadmin_devices.count < 50 %>
+    $(document).ready( function() {
+      $('#device').dataTable({
+        "aaSorting": [],
+        "bPaginate": false,  
+        "iDisplayLength": 50,
+        "aLengthMenu": [[50, 100, 150, -1], [50, 100, 150, "All"]]
+      });
+    });
+  <% else %>
+    $(document).ready( function() {
+        $('#device').dataTable({
+          "aaSorting": [],
+          "bPaginate": true,
+          "iDisplayLength": 50,
+          "aLengthMenu": [[50, 100, 150, -1], [50, 100, 150, "All"]]
+      });
+    });
+  <% end %>
+
+  $('#start_date').datepicker({
+    format: 'yyyy/mm/dd'
+  });
+
+  $('#end_date').datepicker({ 
+    format: 'yyyy/mm/dd'
+  });
+
+
+</script>

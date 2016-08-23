@@ -1,0 +1,94 @@
+<section>
+    <div class="container">
+      <div class="padding_inner">
+        <h1>Listing All Invoices</h1>  
+
+        <!-- For PDF  --> 
+        <!-- <div>
+          <%#= form_tag(all_invoice_pdf_path(format: :pdf), :target=>"_blank", method: :get) do -%>
+            <input type="text" name="start_date" id="start_date" data-provide='datepicker'class="form-control" placeholder="From Date"> To
+            <input type="text" name="end_date" id="end_date" data-provide='datepicker'class="form-control" placeholder="To Date">
+            <%#= submit_tag "Download As PDF", :class=>"btn btn-primary", :id=>"pdf_stop" %>
+          <%#end%>
+          (*For custom report download please provide from date & to date)
+        </div>  -->
+        <!-- For PDF End  --> 
+
+        <div class="clearfix"></div>    
+        <!--merchant_table-->
+        <div class="merchant_table table-responsive">
+          <table class="display table text-center" id="all_invoice">
+          	<thead>
+				<tr>
+				  <th>Date</th>
+				  <th>Invoice Id</th>
+				  <th>Amount</th>
+				  <th>Type</th>
+				  <th>status</th>
+				</tr>
+				</thead>
+			  	<tbody>
+				  	<% @all_invoice.each do |invoice| %>
+					    <tr>
+						    <td>
+						    	<%= invoice.invoice_date.strftime("%d/%m/%y") unless invoice.invoice_date.nil? %>
+					    	</td>
+					      	<td>
+					      		<%= link_to invoice.invoice_number, epsadmin_merchant_invoice_path(invoice.subscription.merchant.merchant_uniq_id,invoice.invoice_number,:all => true )unless invoice.subscription.merchant.nil?%>
+					  		</td>
+						    <td>
+						    	<%= invoice.invoice_amount %>
+					    	</td>
+						    <td>
+						    	<%= invoice.invoice_type %>
+					    	</td>
+						    <td>
+						    	<%= invoice.status.upcase unless invoice.status.nil? %>
+					    	</td>
+					    </tr>
+				  	<% end %>
+			  	</tbody>            
+          	</table>
+        </div><!--merchant_table ends--> 
+    </div>
+  </div>
+</section> 
+
+<script type="text/javascript">
+
+<% if @all_invoice.count < 50 %>
+  $(document).ready( function() {
+    $('#all_invoice').dataTable({
+      	"aaSorting": [],
+        "bPaginate": false,  
+      	"iDisplayLength": 50,
+      	"aLengthMenu": [[50, 100, 150, -1], [50, 100, 150, "All"]]
+    });
+  });
+<% else %>
+  $(document).ready( function() {
+      $('#all_invoice').dataTable({
+      	"aaSorting": [],
+        "bPaginate": true,
+      	"iDisplayLength": 50,
+      	"aLengthMenu": [[50, 100, 150, -1], [50, 100, 150, "All"]]
+    });
+  });
+<% end %>
+
+  $('#start_date').datepicker({
+    format: 'yyyy/mm/dd'
+  });
+
+  $('#end_date').datepicker({ 
+    format: 'yyyy/mm/dd'
+  });
+
+  $(document).ready( function() {
+    $("#pdf_stop").click(function() {
+      alert("aaaaa");
+      window.stop();
+    });
+  });
+
+</script>

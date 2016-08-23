@@ -1,0 +1,43 @@
+<section>
+  <div class="container">
+    <div class="padding_inner">
+        <h1>User Management (Add New)</h1>  
+        <%= form_for @epsadmin_user ,:url => epsadmin_admins_path  do |f| %>
+          <!--login_div-->
+          <div class="login_div text-center change_password">
+            <% if @epsadmin_user.errors.any? %>
+              <div id="error_explanation">
+                <h2><%= pluralize(@epsadmin_user.errors.count, "error") %> prohibited this admin from being saved:</h2>
+                <ul>
+                  <% @epsadmin_user.errors.full_messages.each do |msg| %>
+                    <li class="error_msg"><%= msg %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+            <div class="form-group">            
+              <%= f.text_field :full_name, :class =>"form-control", :placeholder=>"Full Name" %>
+          </div>
+          <div class="form-group">            
+                <% if params[:action] == "edit" %>
+                  <%= f.text_field :email,:readonly => true, :class =>"form-control", :placeholder=>"Email" %>
+              <% else %>
+                  <%= f.text_field :email, :class =>"form-control", :placeholder=>"Email" %>
+              <% end %>
+          </div>
+          <div class="form-group">      
+              <%= f.password_field :password, :class =>"form-control", :placeholder=>"Password" %>
+          </div>  
+          <div class="form-group">
+              <%= f.password_field :password_confirmation, :class =>"form-control", :placeholder=>"Confirm New Password" %>
+          </div>  
+          <div class="form-group">      
+              <%= f.select :role, [['Select Role',''],['Admin','admin'],['Manager','manager'],['Executive','executive']], :class =>"form-control" %>
+          </div>     
+          <button type="submit" class="btn btn-success">Submit</button>
+          </div><!--login_div ends-->
+        <% end %>
+    </div>
+  </div>
+</section>
+

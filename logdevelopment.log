@@ -1,0 +1,76 @@
+D, [2016-06-27T17:58:37.269835 #8472] DEBUG -- : MONGODB | Adding localhost:27017 to the cluster. | runtime: 0.0494ms
+D, [2016-06-27T17:58:37.607272 #8472] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | STARTED | {:filter=>{"monthly_invoice_date"=>"27"}, :project=>nil, :skip=>nil, :limit=>nil, :flags=>[:slave_ok]}
+D, [2016-06-27T17:58:37.772553 #8472] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | SUCCEEDED | 0.165309712s
+D, [2016-06-27T17:58:37.871673 #8472] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | STARTED | {:filter=>{"_id"=>BSON::ObjectId('5767ec2612a5481dae000001')}, :project=>nil, :skip=>nil, :limit=>nil, :flags=>[:slave_ok]}
+D, [2016-06-27T17:58:37.873669 #8472] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | SUCCEEDED | 0.002049126s
+D, [2016-06-27T17:58:37.917691 #8472] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | STARTED | {:filter=>{"merchant_id"=>BSON::ObjectId('5767ec2612a5481dae000001'), "device_status"=>"active"}, :project=>nil, :skip=>nil, :limit=>nil, :flags=>[:slave_ok]}
+D, [2016-06-27T17:58:37.918824 #8472] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | SUCCEEDED | 0.001177619s
+D, [2016-06-27T17:58:37.942957 #8472] DEBUG -- : MONGODB | localhost:27017 | epspro_development.count | STARTED | {:count=>"transactions", :query=>{"device_id"=>BSON::ObjectId('5767ec6612a5481dae000005'), "transaction_status"=>"paid", "created_at"=>{"$gte"=>2016-05-27 12:28:37 UTC, "$lte"=>2016-06-27 12:28:37 UTC}}}
+D, [2016-06-27T17:58:37.990765 #8472] DEBUG -- : MONGODB | localhost:27017 | epspro_development.count | SUCCEEDED | 0.047835527s
+D, [2016-06-27T17:58:37.992001 #8472] DEBUG -- : MONGODB | localhost:27017 | epspro_development.count | STARTED | {:count=>"transactions", :query=>{"device_id"=>BSON::ObjectId('5768e0d912a5480944000012'), "transaction_status"=>"paid", "created_at"=>{"$gte"=>2016-05-27 12:28:37 UTC, "$lte"=>2016-06-27 12:28:37 UTC}}}
+D, [2016-06-27T17:58:37.992910 #8472] DEBUG -- : MONGODB | localhost:27017 | epspro_development.count | SUCCEEDED | 0.000910848s
+D, [2016-06-27T17:58:37.993456 #8472] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | STARTED | {:filter=>{"merchant_id"=>BSON::ObjectId('5767ec2612a5481dae000001'), "device_status"=>"active"}, :project=>{:_id=>1}, :skip=>nil, :limit=>1, :flags=>[:slave_ok]}
+D, [2016-06-27T17:58:37.994145 #8472] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | SUCCEEDED | 0.000705188s
+D, [2016-06-27T17:58:37.994586 #8472] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | STARTED | {:filter=>{"merchant_id"=>BSON::ObjectId('5767ec2612a5481dae000001'), "device_status"=>"active"}, :project=>nil, :skip=>nil, :limit=>nil, :flags=>[:slave_ok, :slave_ok]}
+D, [2016-06-27T17:58:37.995369 #8472] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | SUCCEEDED | 0.000806142s
+D, [2016-06-27T17:58:37.995906 #8472] DEBUG -- : MONGODB | localhost:27017 | epspro_development.count | STARTED | {:count=>"devices", :query=>{"merchant_id"=>BSON::ObjectId('5767ec2612a5481dae000001'), "device_status"=>"active"}}
+D, [2016-06-27T17:58:37.996494 #8472] DEBUG -- : MONGODB | localhost:27017 | epspro_development.count | SUCCEEDED | 0.000600493s
+D, [2016-06-27T17:58:37.997251 #8472] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | STARTED | {:filter=>{"_id"=>BSON::ObjectId('5770b66612a5480a62000001')}, :project=>nil, :skip=>nil, :limit=>nil, :flags=>[:slave_ok]}
+D, [2016-06-27T17:58:37.998086 #8472] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | SUCCEEDED | 0.000860248s
+D, [2016-06-27T18:05:31.186982 #8702] DEBUG -- : MONGODB | Adding localhost:27017 to the cluster. | runtime: 0.1044ms
+D, [2016-06-27T18:05:31.253211 #8702] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | STARTED | {:filter=>{"monthly_invoice_date"=>"27"}, :project=>nil, :skip=>nil, :limit=>nil, :flags=>[:slave_ok]}
+D, [2016-06-27T18:05:31.254293 #8702] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | SUCCEEDED | 0.001105601s
+D, [2016-06-27T18:05:31.306322 #8702] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | STARTED | {:filter=>{"_id"=>BSON::ObjectId('5767ec2612a5481dae000001')}, :project=>nil, :skip=>nil, :limit=>nil, :flags=>[:slave_ok]}
+D, [2016-06-27T18:05:31.307195 #8702] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | SUCCEEDED | 0.000906884s
+D, [2016-06-27T18:05:31.335659 #8702] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | STARTED | {:filter=>{"merchant_id"=>BSON::ObjectId('5767ec2612a5481dae000001'), "device_status"=>"active"}, :project=>nil, :skip=>nil, :limit=>nil, :flags=>[:slave_ok]}
+D, [2016-06-27T18:05:31.336480 #8702] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | SUCCEEDED | 0.000880221s
+D, [2016-06-27T18:05:31.372032 #8702] DEBUG -- : MONGODB | localhost:27017 | epspro_development.count | STARTED | {:count=>"transactions", :query=>{"device_id"=>BSON::ObjectId('5767ec6612a5481dae000005'), "transaction_status"=>"paid", "created_at"=>{"$gte"=>2016-05-27 12:35:31 UTC, "$lte"=>2016-06-27 12:35:31 UTC}}}
+D, [2016-06-27T18:05:31.372834 #8702] DEBUG -- : MONGODB | localhost:27017 | epspro_development.count | SUCCEEDED | 0.000839008s
+D, [2016-06-27T18:05:31.373849 #8702] DEBUG -- : MONGODB | localhost:27017 | epspro_development.count | STARTED | {:count=>"transactions", :query=>{"device_id"=>BSON::ObjectId('5768e0d912a5480944000012'), "transaction_status"=>"paid", "created_at"=>{"$gte"=>2016-05-27 12:35:31 UTC, "$lte"=>2016-06-27 12:35:31 UTC}}}
+D, [2016-06-27T18:05:31.374659 #8702] DEBUG -- : MONGODB | localhost:27017 | epspro_development.count | SUCCEEDED | 0.000831414s
+D, [2016-06-27T18:05:31.375193 #8702] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | STARTED | {:filter=>{"merchant_id"=>BSON::ObjectId('5767ec2612a5481dae000001'), "device_status"=>"active"}, :project=>{:_id=>1}, :skip=>nil, :limit=>1, :flags=>[:slave_ok]}
+D, [2016-06-27T18:05:31.378631 #8702] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | SUCCEEDED | 0.003464719s
+D, [2016-06-27T18:05:31.378957 #8702] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | STARTED | {:filter=>{"merchant_id"=>BSON::ObjectId('5767ec2612a5481dae000001'), "device_status"=>"active"}, :project=>nil, :skip=>nil, :limit=>nil, :flags=>[:slave_ok, :slave_ok]}
+D, [2016-06-27T18:05:31.379724 #8702] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | SUCCEEDED | 0.000790939s
+D, [2016-06-27T18:05:31.382637 #8702] DEBUG -- : MONGODB | localhost:27017 | epspro_development.count | STARTED | {:count=>"devices", :query=>{"merchant_id"=>BSON::ObjectId('5767ec2612a5481dae000001'), "device_status"=>"active"}}
+D, [2016-06-27T18:05:31.383244 #8702] DEBUG -- : MONGODB | localhost:27017 | epspro_development.count | SUCCEEDED | 0.000628468s
+D, [2016-06-27T18:05:31.383990 #8702] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | STARTED | {:filter=>{"_id"=>BSON::ObjectId('5770b66612a5480a62000001')}, :project=>nil, :skip=>nil, :limit=>nil, :flags=>[:slave_ok]}
+D, [2016-06-27T18:05:31.384737 #8702] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | SUCCEEDED | 0.000776221s
+D, [2016-06-27T18:23:26.389097 #9224] DEBUG -- : MONGODB | Adding localhost:27017 to the cluster. | runtime: 0.0482ms
+D, [2016-06-27T18:23:26.392623 #9224] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | STARTED | {:filter=>{"monthly_invoice_date"=>"27"}, :project=>nil, :skip=>nil, :limit=>nil, :flags=>[:slave_ok]}
+D, [2016-06-27T18:23:26.394044 #9224] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | SUCCEEDED | 0.001447616s
+D, [2016-06-27T18:23:26.443698 #9224] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | STARTED | {:filter=>{"_id"=>BSON::ObjectId('5767ec2612a5481dae000001')}, :project=>nil, :skip=>nil, :limit=>nil, :flags=>[:slave_ok]}
+D, [2016-06-27T18:23:26.444811 #9224] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | SUCCEEDED | 0.00115502s
+D, [2016-06-27T18:23:26.470442 #9224] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | STARTED | {:filter=>{"merchant_id"=>BSON::ObjectId('5767ec2612a5481dae000001'), "device_status"=>"active"}, :project=>nil, :skip=>nil, :limit=>nil, :flags=>[:slave_ok]}
+D, [2016-06-27T18:23:26.471385 #9224] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | SUCCEEDED | 0.001044164s
+D, [2016-06-27T18:23:26.491920 #9224] DEBUG -- : MONGODB | localhost:27017 | epspro_development.count | STARTED | {:count=>"transactions", :query=>{"device_id"=>BSON::ObjectId('5767ec6612a5481dae000005'), "transaction_status"=>"paid", "created_at"=>{"$gte"=>2016-05-27 12:53:26 UTC, "$lte"=>2016-06-27 12:53:26 UTC}}}
+D, [2016-06-27T18:23:26.492816 #9224] DEBUG -- : MONGODB | localhost:27017 | epspro_development.count | SUCCEEDED | 0.000935695s
+D, [2016-06-27T18:23:26.493814 #9224] DEBUG -- : MONGODB | localhost:27017 | epspro_development.count | STARTED | {:count=>"transactions", :query=>{"device_id"=>BSON::ObjectId('5768e0d912a5480944000012'), "transaction_status"=>"paid", "created_at"=>{"$gte"=>2016-05-27 12:53:26 UTC, "$lte"=>2016-06-27 12:53:26 UTC}}}
+D, [2016-06-27T18:23:26.494560 #9224] DEBUG -- : MONGODB | localhost:27017 | epspro_development.count | SUCCEEDED | 0.000772658s
+D, [2016-06-27T18:23:26.494913 #9224] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | STARTED | {:filter=>{"merchant_id"=>BSON::ObjectId('5767ec2612a5481dae000001'), "device_status"=>"active"}, :project=>{:_id=>1}, :skip=>nil, :limit=>1, :flags=>[:slave_ok]}
+D, [2016-06-27T18:23:26.495453 #9224] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | SUCCEEDED | 0.000566653s
+D, [2016-06-27T18:23:26.495716 #9224] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | STARTED | {:filter=>{"merchant_id"=>BSON::ObjectId('5767ec2612a5481dae000001'), "device_status"=>"active"}, :project=>nil, :skip=>nil, :limit=>nil, :flags=>[:slave_ok, :slave_ok]}
+D, [2016-06-27T18:23:26.496470 #9224] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | SUCCEEDED | 0.000777037s
+D, [2016-06-27T18:23:26.497503 #9224] DEBUG -- : MONGODB | localhost:27017 | epspro_development.count | STARTED | {:count=>"devices", :query=>{"merchant_id"=>BSON::ObjectId('5767ec2612a5481dae000001'), "device_status"=>"active"}}
+D, [2016-06-27T18:23:26.498073 #9224] DEBUG -- : MONGODB | localhost:27017 | epspro_development.count | SUCCEEDED | 0.000585204s
+D, [2016-06-27T18:23:26.498814 #9224] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | STARTED | {:filter=>{"_id"=>BSON::ObjectId('5770b66612a5480a62000001')}, :project=>nil, :skip=>nil, :limit=>nil, :flags=>[:slave_ok]}
+D, [2016-06-27T18:23:26.499606 #9224] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | SUCCEEDED | 0.000814714s
+D, [2016-06-27T18:29:39.029858 #9502] DEBUG -- : MONGODB | Adding localhost:27017 to the cluster. | runtime: 0.0308ms
+D, [2016-06-27T18:29:39.031933 #9502] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | STARTED | {:filter=>{"monthly_invoice_date"=>"27"}, :project=>nil, :skip=>nil, :limit=>nil, :flags=>[:slave_ok]}
+D, [2016-06-27T18:29:39.032851 #9502] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | SUCCEEDED | 0.000934332s
+D, [2016-06-27T18:29:39.062602 #9502] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | STARTED | {:filter=>{"_id"=>BSON::ObjectId('5767ec2612a5481dae000001')}, :project=>nil, :skip=>nil, :limit=>nil, :flags=>[:slave_ok]}
+D, [2016-06-27T18:29:39.063454 #9502] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | SUCCEEDED | 0.000888005s
+D, [2016-06-27T18:29:39.082754 #9502] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | STARTED | {:filter=>{"merchant_id"=>BSON::ObjectId('5767ec2612a5481dae000001'), "device_status"=>"active"}, :project=>nil, :skip=>nil, :limit=>nil, :flags=>[:slave_ok]}
+D, [2016-06-27T18:29:39.083581 #9502] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | SUCCEEDED | 0.000861816s
+D, [2016-06-27T18:29:39.101138 #9502] DEBUG -- : MONGODB | localhost:27017 | epspro_development.count | STARTED | {:count=>"transactions", :query=>{"device_id"=>BSON::ObjectId('5767ec6612a5481dae000005'), "transaction_status"=>"paid", "created_at"=>{"$gte"=>2016-05-27 12:59:39 UTC, "$lte"=>2016-06-27 12:59:39 UTC}}}
+D, [2016-06-27T18:29:39.101946 #9502] DEBUG -- : MONGODB | localhost:27017 | epspro_development.count | SUCCEEDED | 0.000846203s
+D, [2016-06-27T18:29:39.102875 #9502] DEBUG -- : MONGODB | localhost:27017 | epspro_development.count | STARTED | {:count=>"transactions", :query=>{"device_id"=>BSON::ObjectId('5768e0d912a5480944000012'), "transaction_status"=>"paid", "created_at"=>{"$gte"=>2016-05-27 12:59:39 UTC, "$lte"=>2016-06-27 12:59:39 UTC}}}
+D, [2016-06-27T18:29:39.103528 #9502] DEBUG -- : MONGODB | localhost:27017 | epspro_development.count | SUCCEEDED | 0.000675404s
+D, [2016-06-27T18:29:39.103891 #9502] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | STARTED | {:filter=>{"merchant_id"=>BSON::ObjectId('5767ec2612a5481dae000001'), "device_status"=>"active"}, :project=>{:_id=>1}, :skip=>nil, :limit=>1, :flags=>[:slave_ok]}
+D, [2016-06-27T18:29:39.104372 #9502] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | SUCCEEDED | 0.000507364s
+D, [2016-06-27T18:29:39.104645 #9502] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | STARTED | {:filter=>{"merchant_id"=>BSON::ObjectId('5767ec2612a5481dae000001'), "device_status"=>"active"}, :project=>nil, :skip=>nil, :limit=>nil, :flags=>[:slave_ok, :slave_ok]}
+D, [2016-06-27T18:29:39.105305 #9502] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | SUCCEEDED | 0.000681678s
+D, [2016-06-27T18:29:39.106268 #9502] DEBUG -- : MONGODB | localhost:27017 | epspro_development.count | STARTED | {:count=>"devices", :query=>{"merchant_id"=>BSON::ObjectId('5767ec2612a5481dae000001'), "device_status"=>"active"}}
+D, [2016-06-27T18:29:39.106806 #9502] DEBUG -- : MONGODB | localhost:27017 | epspro_development.count | SUCCEEDED | 0.00055226s
+D, [2016-06-27T18:29:39.107482 #9502] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | STARTED | {:filter=>{"_id"=>BSON::ObjectId('5770b66612a5480a62000001')}, :project=>nil, :skip=>nil, :limit=>nil, :flags=>[:slave_ok]}
+D, [2016-06-27T18:29:39.108206 #9502] DEBUG -- : MONGODB | localhost:27017 | epspro_development.find | SUCCEEDED | 0.000745862s

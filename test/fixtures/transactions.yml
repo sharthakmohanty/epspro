@@ -1,0 +1,29 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  invoice_number: 1
+  stan: 1
+  amount: 1
+  transaction_type: MyString
+  pairing_token: 1
+  transaction_timestamp: 2016-05-07 18:08:19
+  payment_timestamp: 2016-05-07 18:08:19
+  transaction_details: MyString
+  transaction_status: MyString
+  device_id: 1
+  merchant_id: 1
+  customer_id: 1
+
+two:
+  invoice_number: 1
+  stan: 1
+  amount: 1
+  transaction_type: MyString
+  pairing_token: 1
+  transaction_timestamp: 2016-05-07 18:08:19
+  payment_timestamp: 2016-05-07 18:08:19
+  transaction_details: MyString
+  transaction_status: MyString
+  device_id: 1
+  merchant_id: 1
+  customer_id: 1

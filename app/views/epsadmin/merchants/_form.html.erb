@@ -1,0 +1,321 @@
+<section>
+  <div class="container">
+    <div class="padding_inner"> 
+      <% if params[:action] == "new" || params[:action] == "create" %>
+        <h1><%= render_breadcrumbs :separator => ' > ' %> > Create New Merchant </h1>
+      <% else %>
+        <h1><%= render_breadcrumbs :separator => ' > ' %> > Edit Merchant (<%= @epsadmin_merchant.merchant_uniq_id %>) </h1>
+      <% end %>
+      <%= form_for ([:epsadmin, @epsadmin_merchant]),:html => {:multipart => true } do |f| %>
+        <% if @epsadmin_merchant.errors.any? %>
+          <div id="error_explanation">
+            <h2><%= pluralize(@epsadmin_merchant.errors.count, "error") %> prohibited this merchant from being saved:</h2>
+            <ul>
+            <% @epsadmin_merchant.errors.full_messages.each do |msg| %>
+              <li class="error_msg"><%= msg %></li>
+            <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+          <div class="merchant_details">
+            <div class="row">
+              <h2>Merchant Details</h2>
+                <table>
+                  <tr>
+                    <td>
+                      <%= f.label :first_name %>
+                    </td>
+                    <td>
+                      <div class="form-group">                     
+                        <%= f.text_field :first_name, :class=>"form-control" %>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <%= f.label :last_name %>
+                    </td>
+                    <td>
+                      <div class="form-group">                            
+                        <%= f.text_field :last_name, :class=>"form-control" %>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <%= f.label :email_address %>
+                    </td>
+                    <td>
+                      <div class="form-group">                            
+                        <% if @epsadmin_merchant.status != "pending" && params[:action] != 'new' %>
+                          <%= f.text_field :email_address, :readonly => true, :class=>"form-control"  %>
+                        <% else %>
+                          <%= f.text_field :email_address, :class=>"form-control" %>
+                        <% end %>
+                      </div>
+                    </td>
+                  </tr> 
+                  <tr>
+                    <td>
+                        <%= f.label :phone_number %>
+                    </td>
+                    <td>
+                      <div class="form-group">    
+                        <%= f.text_field :phone_number, :class=>"form-control" %>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>      
+                      <%= f.label :age %>
+                    <td>
+                      <div class="form-group">                            
+                          <%= f.text_field :age, :class=>"form-control" %>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <%= f.label :sex %>
+                    </td>
+                    <td>
+                      <div class="form-group">                            
+                        <%= f.select :sex, [['Select Sex',''],['Male','Male'],['Female','Female'],['Third','Third']], :class=>"form-control" %>
+                      </div>
+                    </td>
+                  </tr>           
+              </table>
+            </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="merchant_details business_details">
+          <div class="row">
+            <h2>Business Details</h2>
+            <table>
+              <tr>
+                <td>
+                  <%= f.label :business_name %>
+                </td>
+                <td>
+                  <div class="form-group">                            
+                    <%= f.text_field :business_name, :class=>"form-control" %>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <%= f.label :business_type %>
+                </td>
+                <td>
+                  <div class="form-group">                            
+                    <%= f.select :business_type, [['Select Industry',''],['Individual','Individual'],['Proprietorship','Proprietorship'],['Partnership','Partnership'],['Private limited','Private limited'],['Others','Others']], :class=>"form-control" %>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>     
+                  <%= f.label :industry_type %>
+                </td>
+                <td>
+                  <div class="form-group">                            
+                    <%= f.select :industry_type, [['Select Industry',''],['Real Estate','Real Estate'],['Hospitality','Hospitality'],['Wellness & Beauty','Wellness & Beaut'],['Healthcare','Healthcare'],['Education','Education'],['Retail Shopping','Retail Shopping'],['Finance & Insurance','Finance & Insurance'],['Travels & Holidays','Travels & Holidays'],['Media','Media'],['Manufacturing','Manufacturing'],['Professionals','Professionals'],['Internet & Ecommerce','Internet & Ecommerce'],['Art & Entertainment','Art & Entertainment'],['Others','Others']], :class=>"form-control" %>
+                  </div>
+                </td>
+              </tr> 
+
+              <tr>
+                <td>
+                  <%= f.label :start_subscription_date, "Subscription Date" %>
+                </td>
+                <td>
+                  <div>
+                    <% if params[:action] == "edit" || params[:action] == "update" %>
+                      <input type="text" name="start_subscription_date" id="start_subscription_date" data-provide='datepicker' class="form-control" value= <%= @epsadmin_merchant.subscription.start_subscription_date %> >
+                    <% else %>
+                      <input type="text" name="start_subscription_date" id="start_subscription_date" data-provide='datepicker'class="form-control" >
+                    <% end %>
+                    <%= f.hidden_field :status %>
+                  </div>
+                </td>
+              </tr>
+
+              <tr class="add_top">
+                <td>     
+                  <%= f.label :business_address %>
+                </td>
+                <td>
+                  <div class="form-group">                            
+                    <%= f.text_area :business_address, :class=>"form-control" %>
+                  </div>
+                </td>
+              </tr>        
+              <% if params[:action] == "edit" || params[:action] == "update" %>
+                <tr class="add_top">
+                  <td>     
+                    <%= f.label :version_comments %>
+                  </td>
+                  <td>
+                    <div class="form-group">
+                       <textarea class="form-control" id="version_comments" name="version_comments"></textarea> 
+                    </div>
+                  </td>
+                </tr> 
+              <% end %> 
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="clearfix"></div>
+        <div class="kyc_details">
+          <h2>KYC Details</h2>
+          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <div class="merchant_details">
+              <div class="row">
+          
+                <table>
+                  <tr class="kyc_txt">
+                    <td>
+                      <%= f.label :is_kyc_submitted %>
+                    </td>
+                    <td>
+                      <div class="form-group">       
+                        <%= f.check_box :is_kyc_submitted %>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <%= f.label :address_proof %>
+                    </td>
+                    <td>
+                      <div class="form-group">                            
+                        <%= f.file_field :address_proof, :class=>"form-control" %>
+                        <% if params[:action] == "edit" || params[:action] == "update" %>
+                          <%= image_tag @epsadmin_merchant.address_proof.url, :width => 150, :height => 100 unless @epsadmin_merchant.address_proof.blank? %>
+                        <% end %>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <%= f.label :id_proof %>
+                    </td>
+                    <td>
+                      <div class="form-group">                            
+                        <%= f.file_field :id_proof, :class=>"form-control" %>
+                        <% if params[:action] == "edit" || params[:action] == "update" %>
+                          <%= image_tag @epsadmin_merchant.id_proof.url, :width => 150, :height => 100 unless @epsadmin_merchant.id_proof.blank? %>
+                        <% end %>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><%= f.label :business_address_proof %></td>
+                    <td>
+                      <div class="form-group">                            
+                        <%= f.file_field :business_address_proof, :class=>"form-control" %>
+                        <% if params[:action] == "edit" || params[:action] == "update" %>
+                          <%= image_tag @epsadmin_merchant.business_address_proof.url, :width => 150, :height => 100 unless @epsadmin_merchant.business_address_proof.blank? %>
+                        <% end %>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>                       
+                      <%= f.label :business_id_proof %>
+                    </td>
+                    <td>
+                      <div class="form-group">     
+                        <%= f.file_field :business_id_proof, :class=>"form-control"  %>
+                        <% if params[:action] == "edit" || params[:action] == "update" %>
+                          <%= image_tag @epsadmin_merchant.business_id_proof.url, :width => 150, :height => 100 unless @epsadmin_merchant.business_id_proof.blank? %>
+                        <% end %>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>  
+
+          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <div class="merchant_details business_details given_id">
+              <div class="row">
+                <table>   
+                  <tr>
+                    <td>
+                      <%= f.label :given_address_proof, "Address Proof" %>
+                    </td>
+                    <td>
+                      <%= f.select :given_address_proof, [['Select Address Proof',''],['Passport','Passport'],['Bank Passbook','Bank Passbook'],['Telephone Bill','Telephone Bill'],['Rental Agreement','Rental Agreement'],['Driving License','Driving License'],['Aadhar Card','Aadhar Card'],['Government Provided ID','Government Provided ID']], :class=>"form-control" %>
+                    </td>
+                  </tr>          
+                  <tr>
+                    <td>
+                      <%= f.label :given_id_proof, "Id Proof" %>
+                    </td>
+                    <td>
+                      <div class="form-group">                            
+                          <%= f.select :given_id_proof, [['Select Id Proof',''],['Pan Card','Pan Card'],['Passport','Passport'],['Driving License','Driving License'],['Voters ID','Voters ID'],['Aadhar Card','Aadhar Card'],['Government Provided ID','Government Provided ID']], :class=>"form-control" %>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>                            
+                      <%= f.label :given_business_address_proof, "Business Address Proof" %>
+                    </td>
+                    <td>
+                      <div class="form-group">
+                        <%= f.select :given_business_address_proof, [['Select Business Address Proof',''],['Bank Passbook','Bank Passbook'],['Telephone Bill','Telephone Bill'],['Rental Agreement','Rental Agreement']], :class=>"form-control" %>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>                       
+                      <%= f.label :given_business_id_proof, "Business Id Proof"  %>
+                    </td>
+                    <td>
+                      <div class="form-group">     
+                        <%= f.select :given_business_id_proof, [['Select Business Id Proof',''],['Shops & Establishment Record','Shops & Establishment Record'],['Company TAN','Company TAN'],['Company PAN','Company PAN'],['TIN','TIN'],['VAT','VAT'],['ST Certificate','ST Certificate']], :class=>"form-control" %>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="clearfix"></div>    
+        </div>
+        <div class="submit_space text-center">
+          <%= f.submit :class=>"btn btn-success rec_submit" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+  
+<script type="text/javascript">
+$('#start_subscription_date').datepicker({ 
+    startDate: new Date()
+});
+// $(".rec_submit").click(function(){
+// var myArray='<%=User.all.map(&:email)%>'
+// myArray=myArray.replace(/&quot;/gi,"\"");
+//     myArray=myArray.replace(/\[/gi,"");
+//     myArray=myArray.replace(/\]/gi,"");
+//     myArray=myArray.split(',');
+//         var name = $('#merchant_email_address').val();
+//         if (jQuery.inArray(name, myArray)!='-1') {
+           
+//         } else {
+//              $(".error_msg").show();
+//              // return false;
+//         }
+
+// });
+</script>

@@ -1,0 +1,111 @@
+<section>
+	<div class="container">
+		<div class="padding_inner details_lookup">
+	  		<h1>Billing Individual (<%=@billing_individual.invoice_number%>)</h1>
+  			<div class="clearfix"></div>
+	  		<!--tab_menu ends-->	
+	  		<div class="table_outer">
+		  		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+				  	<div class="merchant_details">
+				  		<div class="row">			  		
+					  		<table>
+					  			<tr>
+					  				<td>
+					  					Invoice Number: 
+									</td>
+					  				</td>
+					  				<td><%=@billing_individual.invoice_number%></td>
+					  			</tr>
+								<tr>
+					  				<td>
+					  					Invoice Date: 
+					  				</td>
+					  				<td><%= @billing_individual.invoice_date.strftime("%d/%m/%y") unless  @billing_individual.invoice_date.nil? %></td>
+					  			</tr>
+					  			<tr>
+					  				<td>
+					  					Business Name: 
+					  				</td>
+					  				<td><%=@billing_individual.business_name%></td>
+					  			</tr>	
+					  			<tr>
+					  				<td class="add_top">
+					  					Address:  
+					  				</td>
+					  				<td><%=@billing_individual.address%></td>
+					  			</tr>
+					  			<tr>
+					  				<td>
+					  					Amount (Rs.): 
+					  				</td>
+					  				<td><%= @billing_individual.invoice_amount %></td>
+					  			</tr>	
+					  			<tr>
+					  				<td>
+			  							Tax (Rs.):  
+			  						</td>
+			  						<td>
+			  							<%= @billing_individual.tax %>
+			  						</td>
+					  			</tr>		  					  			
+							</table>
+				  		</div>
+			  		</div>
+			  	</div>
+
+			  	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+				  	<div class="merchant_details">
+				  		<div class="row">			  		
+					  		<table>
+					  			<tr>
+					  				<td>
+					  					Invoice Type: 
+									</td>
+					  				<td><%= @billing_individual.invoice_type %></td>
+					  			</tr>
+					  			<tr>
+					  				<td>
+					  					Status: 
+				  					</td>
+					  				<td>
+					  					<% if @billing_individual.status == "pending" || @billing_individual.status == "cancelled" %>
+							  				<span class="pending">
+							  					<%= @billing_individual.status.upcase unless @billing_individual.status.nil? %>
+							  				</span> 
+										<% else %>
+							  				<span class="active">
+							  					<%= @billing_individual.status.upcase unless @billing_individual.status.nil? %>
+											</span>
+										<% end %>
+					  				</td>
+					  			</tr>
+					  			<tr>
+					  				<td>
+					  					Paid Date: 
+					  				</td>
+					  				<td><%= @billing_individual.paid_date.strftime("%d/%m/%y") unless  @billing_individual.paid_date.nil? %></td>
+					  			</tr>	
+					  			<tr>
+					  				<td>
+					  					Payment Details: 
+					  				</td>
+					  				<td><%= @billing_individual.payment_details %></td>
+					  			</tr>
+					  			<tr>
+					  				<td>
+					  					Remarks: 
+					  				</td>
+					  				<td><%= @billing_individual.remarks %></td>
+					  			</tr>			  					  			
+							</table>
+				  		</div>
+		  			</div>
+			  	</div>	
+			  	<div class="clearfix"></div>
+			  	<div class="submit_space button_space text-center">	
+		<%= link_to 'Back', dashboard_billing_path, :class => "btn btn-primary" %>			
+	 </div>
+	  		</div><!--table_outer ends-->
+		</div>
+	</div>
+</section>

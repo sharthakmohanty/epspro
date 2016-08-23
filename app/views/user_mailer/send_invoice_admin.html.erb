@@ -1,0 +1,84 @@
+<div>
+	Below are the Invoices generated today i.e. <%= Time.now.strftime("%d-%b-%Y") %>
+</div>
+<% if (!@invoices.nil? && !@invoices.blank?) || !@invoices.empty? %>
+	<table cellpadding="2" cellspacing="2" border="1">
+		<tr>
+			<td>
+				Merchant ID
+			</td>
+			<td>
+				Merchant Name
+			</td>
+			<td>
+				Business Name
+			</td>
+			<td>
+				Invoice Number
+			</td>
+			<td>
+				No. Of Active Device
+			</td>
+			<td>
+				Total Monthly Rental Cost
+			</td>
+			<td>
+				Total no. of last month transactions
+			</td>
+			<td>
+				Transaction cost
+			</td>
+			<td>
+				Sub Total
+			</td>
+			<td>
+				Tax(15%)
+			</td>
+			<td>
+				Grand Total
+			</td>
+		</tr>
+		<%@invoices.each do |i|%>
+		<%val = i.split("|")%>
+		<tr>
+			<td>
+				<%=val[0]%>
+			</td>
+			<td>
+				<%=val[1]%>
+			</td>
+			<td>
+				<%=val[2]%>
+			</td>
+			<td>
+				<%=val[3]%>
+			</td>
+			<td>
+				<%=val[4]%>
+			</td>
+			<td>
+				<%=val[5]%>
+			</td>
+			<td>
+				<%=val[6]%>
+			</td>
+			<td>
+				<%=val[7]%>
+			</td>
+			<td>
+				<%=val[8]%>
+			</td>
+			<td>
+				<%=val[9]%>
+			</td>
+			<td>
+				<%=val[10]%>
+			</td>
+		</tr>
+		<%end%>
+	</table>
+<% else %>
+	<div>
+		Sorry no invoices found for todays subscription date.
+	</div>
+<% end %>

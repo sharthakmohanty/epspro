@@ -1,0 +1,329 @@
+<% @invoice_number = @merchant.merchant_uniq_id.last(3).upcase + Date.today.strftime("%m%d").to_s + Time.now.strftime("%M%S").to_s %>
+<section>
+	<div class="container">
+	    <% if !flash[:notice].nil? || !flash[:notice].blank? %>
+	      <p class="alert alert-success">
+	        <a title="close" aria-label="close" data-dismiss="alert" class="close" href="#">×</a>
+	        <%= flash[:notice] %>
+	      </p>
+	    <% end %>
+		<div class="padding_inner details_lookup">
+	  		<h1><%= render_breadcrumbs :separator => ' > ' %> > <%= @epsadmin_device.terminal_id %></h1>
+	  		<div class="tab_menu">
+	  			<ul>
+	  				<li><%=link_to "Details",epsadmin_merchant_path(@merchant.merchant_uniq_id) %></li>
+	  				<li><%=link_to "Devices",epsadmin_merchant_devices_path(@merchant.merchant_uniq_id), :class=>"active"%></li>
+	  				<li><%= link_to 'Transactions', epsadmin_merchant_transaction_path(@merchant.merchant_uniq_id) %></li>
+	  				<li><%= link_to 'Invoices', epsadmin_merchant_invoices_path(@merchant.merchant_uniq_id) %></li>
+	  			</ul>
+	  			<div class="clearfix"></div>
+	  		</div>
+  			<div class="clearfix"></div>
+	  		<!--tab_menu ends-->	
+	  		<div class="table_outer">
+		  		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+				  	<div class="merchant_details">
+				  		<div class="row">			  		
+					  		<table>
+					  			<tr>
+					  				<td>
+					  					Device Serial Number: 
+					  				</td>
+					  				<td><%=@epsadmin_device.device_serial_number%></td>
+					  			</tr>
+								<tr>
+					  				<td>
+					  					Sim Phone Number: 
+					  				</td>
+					  				<td><%=@epsadmin_device.sim_phone_number%></td>
+					  			</tr>	
+					  			<tr>
+					  				<td>
+					  					Device Make: 
+					  				</td>
+					  				<td><%=@epsadmin_device.device_make%></td>
+					  			</tr>
+					  			<tr>
+					  				<td>
+					  					Device Display: 
+					  				</td>
+					  				<td><%= @epsadmin_device.device_display %></td>
+					  			</tr>	
+					  			<tr>
+					  				<td>
+			  							Status: 
+			  						</td>
+			  						<td>
+			  							<% if @epsadmin_device.device_status == "active" %>
+				  							<b class="active">
+			  									<%= @epsadmin_device.device_status.upcase unless @epsadmin_device.device_status.nil? %>
+			  								</b>
+		  								<% else %>
+											<b class="pending">
+			  									<%= @epsadmin_device.device_status.upcase unless @epsadmin_device.device_status.nil? %>
+			  								</b>
+		  								<% end %>
+			  						</td>
+					  			</tr>		  					  			
+							</table>
+				  		</div>
+			  		</div>
+			  	</div>
+
+			  	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+				  	<div class="merchant_details">
+				  		<div class="row">			  		
+					  		<table>
+					  			<tr>
+					  				<td>
+					  					Terminal Id: 
+									</tdpopup>
+					  				<td><%= @epsadmin_device.terminal_id %></td>
+					  			</tr>
+					  			<tr>
+					  				<td>
+					  					Bank MMID: 
+					  				</td>
+					  				<td>
+					  					<%= @epsadmin_device.bank_mmid unless @epsadmin_device.bank_mmid.nil? %>
+					  				</td>
+					  			</tr>
+					  			<tr>
+					  				<td>
+					  					Setup Cost (Rs.): 
+					  				</td>
+					  				<td>
+					  					<%= @epsadmin_device.setup_cost %>
+					  				</td>
+					  			</tr>
+					  			<tr>
+					  				<td>
+					  					Monthly Cost (Rs.): 
+					  				</td>
+					  				<td><%= @epsadmin_device.monthly_cost%> </td>
+					  			</tr>	
+					  			<tr>
+					  				<td>
+					  					Transaction Cost (Rs.): 
+					  				</td>
+					  				<td><%= @epsadmin_device.transaction_cost %></td>
+					  			</tr>
+					  			<% @terminal = @merchant.devices.where(:id => @epsadmin_device.parent_id).first %>
+					  			<% if !@terminal.nil? %>
+						  			<tr>
+						  				<td>
+						  					Replacement Terminal Id: 
+						  				</td>
+						  				<td><%= @terminal.terminal_id unless @terminal.nil? %></td>
+						  			</tr>
+					  			<% end %>
+					  			<% if @epsadmin_device.device_status == "active"%>
+						  			<tr>
+						  				<td>
+						  					Device Activation Date: 
+						  				</td>
+						  				<td><%= @epsadmin_device.updated_at.strftime("%d/%m/%Y") unless @epsadmin_device.updated_at.nil? %></td>
+						  			</tr>	
+					  			<%end %>	  					  			
+							</table>
+				  		</div>
+		  			</div>
+			  	</div>
+			  	<input type="hidden" id="dev_id" value= <%= @epsadmin_device.id unless @epsadmin_device.nil? %> >
+			  	<input type="hidden" id="mer_id" value= <%= @merchant.id %> >	
+				<input type="hidden" id="invoice_number" value= <%= @invoice_number %> >
+				<input type="hidden" id="invoice_date" value= <%= Date.today %> >
+				<textarea rows="4" cols="50" style="display:none;"  id="business_name"  ><%= @merchant.business_name %></textarea> 
+				<textarea rows="4" cols="50" style="display:none;" id="business_address">
+					<%= @merchant.business_address %>
+				</textarea> 
+				<input type="hidden" id="invoice_type" value= "Setup" >
+				<input type="hidden" id="setup_cost" value= <%= @epsadmin_device.setup_cost %> >
+
+	  			<div class="clearfix"></div>			
+	  			<div class="submit_space button_space text-center"> 
+	  				<%if @epsadmin_device.parent_id.blank?%>
+						<%if @epsadmin_device.invoice.nil? &&  @epsadmin_device.device_status != "deactivated" %>
+							<button type="button" id="invoice" class="btn btn-warning invoice">Create Invoice</button>
+						<% end %>
+					<% else %>
+						<%inv_status = Device.where(:id=>@epsadmin_device.parent_id).first.invoice.status unless Device.where(:id=>@epsadmin_device.parent_id).first.invoice.blank?%>
+						<%if @epsadmin_device.invoice.nil? && inv_status!="paid" %>
+							<button type="button" id="invoice" class="btn btn-warning invoice">Create Invoice</button>
+						<% end %>
+					<% end %>
+
+	  				<%= link_to 'Edit', edit_epsadmin_merchant_device_path(@merchant,@epsadmin_device), :class => "btn btn-info", :disabled => false if is_device_editable?(@epsadmin_device.device_status) %>
+
+	  				<% if !@epsadmin_device.invoice.nil? %>
+	  					<% if @epsadmin_device.invoice.status == "pending" || (@epsadmin_device.device_status != "deactivated" && @epsadmin_device.invoice.status == "pending") %>
+							
+							<%= link_to 'Destroy', epsadmin_merchant_device_path(@merchant,@epsadmin_device), method: :delete, data: { confirm: 'Are you sure you want to Destroy this Device?' }, :class => "btn btn-danger", :disabled => false if is_device_deletable?(@epsadmin_device.device_status) %>
+						<% end %>
+					<% else %>
+						<%= link_to 'Destroy', epsadmin_merchant_device_path(@merchant,@epsadmin_device), method: :delete, data: { confirm: 'Are you sure you want to Destroy this Device?' }, :class => "btn btn-danger", :disabled => false if is_device_deletable?(@epsadmin_device.device_status) %>
+					<% end %>
+
+					<%= link_to 'Back', epsadmin_merchant_devices_path(@merchant.merchant_uniq_id), :class=>"btn btn-primary"  %>
+				  	<!--history-->
+				  	<% unless @history_records.blank?%>
+				  		<div class="version_det btn btn-warning">History Details</div>
+						<div class="clearfix"></div>
+						<div class="merchant_table table-responsive">
+							<table id="history_table" class="display table text-left device_history">
+								<thead>
+									<tr>
+									    <th>Version No</th>
+									    <th>Updated At</th>
+									    <th>Original</th>
+									    <th>Modified</th>
+									    <th>Modifier Name</th>
+								  	</tr>
+							    </thead>
+							    <tbody>
+								  	<% @history_records.each do |history| %>
+								  		<% if history.action != "create" %>
+										    <tr>
+										      	<td align="center">
+										      		<%=(history.version - 1)%>
+									      		</td>
+											    <td><%=history.updated_at.strftime("%d %b %Y") unless history.updated_at.nil? %> at <%= history.updated_at.strftime("%I:%M %P") unless history.updated_at.nil? %>
+											    </td>
+
+										      	<td>
+											    	<%history.original.each do |k,v| %>
+											      		<%= t("epsadmin_merchants.#{k.to_s}")%> : <%= v.to_s %> <br>
+											      	<% end %>
+										      	</td>
+
+										    	<td>
+											    	<%history.modified.each do |k,v| %>
+											      		<%= t("epsadmin_merchants.#{k.to_s}")%> : <%= v.to_s %> <br>
+										      		<% end %>
+									      		</td>
+
+  										      	<td align="center">
+										      		<% @name = User.find(history.modifier_id) unless history.modifier_id.blank? %>
+										      		<%= @name.full_name unless @name.blank? %>
+									      		</td>
+										    </tr>
+								  		<% end %>
+								  	<% end %>
+								</tbody>
+							</table>
+						</div>
+					<% end %>
+				</div>
+	
+				  <!--status update-->
+				<div class="status_update text-center">
+				  	<h3>Status Update</h3>
+
+				  	<% if @epsadmin_device.device_status == "pending" %>
+						<button type="button" id="activate" class="btn btn-success scheck">Activate</button> 
+						<button type="button" id="inactivate" class="btn btn-warning" disabled>Inactivate</button> 
+						<button type="button" id="deactivate" class="btn btn-danger" disabled>Deactivate</button> 
+					<% end %>
+
+					<% if @epsadmin_device.device_status == "active" %>
+						<button type="button" id="activate" class="btn btn-success" disabled>Activated</button> 
+						<button type="button" id="inactivate" class="btn btn-warning scheck">Inactivate</button> 
+						<button type="button" id="deactivate" class="btn btn-danger scheck">Deactivate</button> 
+					<% end %>
+
+					<% if @epsadmin_device.device_status == "inactive" %>
+						<button type="button" id="activate" class="btn btn-success scheck">Activate</button> 
+						<button type="button" id="inactivate" class="btn btn-warning" disabled>Inactivated</button> 
+						<button type="button" id="deactivate" class="btn btn-danger scheck">Deactivate</button> 
+					<% end %>
+				</div><!--stats update ends-->
+	  		</div><!--table_outer ends-->
+		</div>
+	</div>
+</section> 
+
+<script>
+	$(document).ready(function(){
+		 $(".merchant_table").hide();
+	    $('.scheck').click(function(){
+	    	var status= $(this).attr('id');
+	    	if(status == "activate")
+    	var check = confirm("Are you sure you want to Activate this Device?");
+    	else if(status == "inactivate")
+    		var check = confirm("Are you sure you want to Inactivate this Device?");
+    	else 
+    		var check = confirm("Are you sure you want to Deactivate this Device?");
+	    	
+	        if (check == true) {
+		    	var status= $(this).attr('id');
+				$.ajax({
+				type: "GET",
+				url: '/epsadmin/merchants/<%=@merchant.id%>/devices/<%=@epsadmin_device.id%>/device_status',
+				data: {st: status},
+				dataType: 'json',
+			 	success: function(data){
+		              	if(data == true){
+		                  	alert("Status successfully updated")
+							// window.location.href='/epsadmin/merchants/<%=@merchant.merchant_uniq_id%>/devices/<%=@epsadmin_device.terminal_id%>'; 
+							location.reload();
+		              	}
+		              	else{
+		                 	alert("Device invoice should be Paid / Replacement device status should be inactive or deactivated")
+		                  	return false;
+		              	}
+		 
+		            }
+				});
+			}
+			else{
+				return false;
+			}
+	    });
+$(".version_det").click(function(){
+		$(".merchant_table").toggle();
+	});
+	});
+
+	$('.invoice').click(function(){
+		var cst = $("#setup_cost").val();
+		var id = $("#mer_id").val();
+		var dev_id = $("#dev_id").val();
+		var inv_no = $("#invoice_number").val();
+		var inv_dt = $("#invoice_date").val();
+		var bus_nam = $("#business_name").val();
+		var add = $("#business_address").val();
+		var bus_add = add.trim();
+		var inv_typ = $("#invoice_type").val();
+	 	$.ajax({
+		   	url: "/epsadmin/devices/autocreate_invoice",
+		   	type: "POST",
+		   	data: {"id" : id, "dev_id" : dev_id,"cst" : cst, "inv_no" : inv_no, "inv_dt" : inv_dt, "bus_nam" : bus_nam, "bus_add" : bus_add, "inv_typ" : inv_typ},
+		   	dataType: "json",
+		   	success: function(data) {
+		   		alert("Invoice was created successfully with invoice number" + " " + inv_no + ". " + "Please check invoice page for more details.")
+		        window.location.href='/epsadmin/merchants/<%=@merchant.merchant_uniq_id%>/invoices'
+	     	}
+	   	});
+
+	});
+
+	<% if @history_records.count < 50 %>
+	 	$(document).ready( function() {
+			$('.device_history').dataTable({
+				"order": [[ 0, "desc" ]],
+			    "bPaginate": false,  
+		        "iDisplayLength": 50,
+		        "aLengthMenu": [[50, 100, 150, -1], [50, 100, 150, "All"]]
+			});
+		});
+	<% else %>
+		$(document).ready( function() {
+		  	$('.device_history').dataTable({
+				"order": [[ 0, "desc" ]],
+		    	"bPaginate": true,
+		        "iDisplayLength": 50,
+		        "aLengthMenu": [[50, 100, 150, -1], [50, 100, 150, "All"]]
+			});
+		});
+	<% end %>
+</script>

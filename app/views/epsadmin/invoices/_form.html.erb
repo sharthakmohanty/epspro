@@ -1,0 +1,391 @@
+
+<section>
+    <div class="container">
+      <div class="padding_inner">
+        <% if params[:action] == "new" || params[:action] == "create" %>
+          <% @invoice_number = @merchant.merchant_uniq_id.last(3).upcase + Date.today.strftime("%m%d").to_s + Time.now.strftime("%M%S").to_s %>
+          <h1><%= render_breadcrumbs :separator => ' > ' %> > Add New Invoice</h1>
+        <% else %>
+          <h1><%= render_breadcrumbs :separator => ' > ' %> > Edit Invoice (<%= @epsadmin_invoice.invoice_number %>)</h1>
+         <% end %>
+        
+        <div class="tab_menu">
+          <ul>
+            <li>
+              <%= link_to "Details",epsadmin_merchant_path(@merchant.merchant_uniq_id) %>
+            </li>
+            <li>
+              <%= link_to "Devices",epsadmin_merchant_devices_path(@merchant.merchant_uniq_id) %>
+            </li>
+            <li>
+              <%= link_to 'Transactions', epsadmin_merchant_transaction_path(@merchant.merchant_uniq_id) %>
+            </li>
+            <li>
+              <%= link_to 'Invoices', epsadmin_merchant_invoices_path(@merchant.merchant_uniq_id), :class=>"active" %>
+            </li>
+          </ul>
+          <div class="clearfix"></div>
+        </div>
+        <%= form_for([:epsadmin, @merchant,@epsadmin_invoice]) do |f| %>
+          <% if @epsadmin_invoice.errors.any? %>
+            <div id="error_explanation">
+              <h2><%= pluralize(@epsadmin_invoice.errors.count, "error") %> prohibited this invoice from being saved:</h2>
+
+              <ul>
+              <% @epsadmin_invoice.errors.full_messages.each do |msg| %>
+                <li class="error_msg"><%= msg %></li>
+              <% end %>
+              </ul>
+            </div>
+          <% end %>
+          <div class="table_outer">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+              <div class="merchant_details">
+                <div class="row">     
+                  <table>
+                    <tr>
+                      <td>Business Name</td>
+                      <td>
+                        <div class="form-group">
+                          <%= @merchant.business_name %>
+                            <%= f.hidden_field :business_name, :value => @merchant.business_name, :readonly => true  %>
+                          </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Business Address</td>
+                      <td>
+                        <div class="form-group">                
+                          <%= @merchant.business_address %>
+                            <%= f.hidden_field :address, :value => @merchant.business_address, :readonly => true  %>
+                          </div>
+                      </td>
+                    </tr>
+                     <tr>
+                      <td>Invoice Date</td>
+                      <td>
+                        <div class="form-group">          
+                          <% if params[:action] == "new" || params[:action] == "create" %>       
+                            <%= Date.today.strftime("%d/%m/%y") %>
+                            <%= f.hidden_field :invoice_date, :value => Date.today, :readonly => true  %>
+                          <% else %>
+                            <%= @epsadmin_invoice.invoice_date.strftime("%d/%m/%y") unless @epsadmin_invoice.invoice_date.nil? %>
+                          <% end %>
+                        </div>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+              <div class="merchant_details business_details">
+                <div class="row">
+                  <table>
+                    <tr>
+                      <td>Invoice Number</td>
+                      <td>
+                        <div class="form-group">
+                          <% if params[:action] == "new" || params[:action] == "create" %>   <%= @invoice_number %>
+                            <%= f.hidden_field :invoice_number, :value => @invoice_number, :readonly => true   %>
+                          <% else %>
+                            <%= @epsadmin_invoice.invoice_number %>
+                            <%= f.hidden_field :invoice_number, :value => @epsadmin_invoice.invoice_number, :readonly => true   %>
+                          <% end %>
+                            <%= f.hidden_field :subscription_id, :value => @subscription.id %>
+                            <%= f.hidden_field :status, :value => "pending", :readonly => true  %>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Invoice Type</td>
+                      <td>
+                        <div class="form-group">
+                            <% if params[:device_id].nil? && params[:device_id].blank? && @epsadmin_invoice.device_id.nil? %>
+                                <%= f.select :invoice_type, [['Setup','Setup'],['Monthly','Monthly'],['Others','Others']] %>
+                            <% else %>
+                                Setup
+                                <%= f.hidden_field :invoice_type, :value => "Setup" %>
+                                <%= f.hidden_field :device_id, :value => @epsadmin_invoice.device_id %>
+                            <% end %>
+                          </div>
+                      </td>
+                    </tr>
+                    <% if params[:action] == "edit" || params[:action] == "update" %>
+                <tr class="add_top">
+                  <td>     
+                   Version Comments
+                  </td>
+                  <td>
+                    <div class="form-group">
+                       <textarea class="form-control" id="version_comments" name="version_comments"></textarea> 
+                    </div>
+                  </td>
+                </tr> 
+              <% end %> 
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+          </div>            
+
+          <!--merchant_table-->
+          <div class="merchant_table table-responsive invoice_add_tbl">
+            <table class="table text-center" id="invoice_tbl">
+              <tr id="invoice_head">
+                <th>Type</th>
+                <th>Description</th>
+                <th colspan="2">Amount</th>               
+              </tr>
+              
+              <tr id="invoice_additional" class="right_txt">
+                <td colspan="2">
+                 Sub Total (Rs.)
+                </td>
+                <td>
+                  <div id="invoice_subtotal" ></div>
+                </td>
+              </tr>
+
+              <tr class="right_txt">
+                <td colspan="2">
+                  Tax (Rs.)
+                </td>
+                <td>
+                  <div id="invoice_tax"></div>
+                  <%= f.hidden_field :tax, :id => "tax" %>
+                </td>
+              </tr>
+
+              <tr class="right_txt">
+                <td colspan="2">
+                 Grand Total (Rs.)
+                </td>
+                <td>
+                  <div id="invoice_grandtotal">
+                  </div>
+                  <%= f.hidden_field :invoice_amount, :id => "amount" %>
+                </td>
+              </tr>             
+            </table>
+            <div class="submit_space text-center">
+              <input class="btn btn-primary" onclick="addRow('invoice_tbl')" type="button" value="Add Invoice Line Items">
+              <%= f.submit :class => "btn btn-success" %>
+            </div>
+            
+          </div>
+        <% end %>
+        <!--merchant_table ends--> 
+    </div>
+  </div>
+</section> 
+
+
+
+
+<script>
+var rowCount = 0;
+function calculate()
+{
+  var st = 0;
+  var tax = 0;
+  var gt = 0;
+  var table = document.getElementById("invoice_tbl");
+  var rowCount = table.rows.length-3;
+  if(rowCount > 0)
+  {
+    for(i=0;i<rowCount;i++)
+    {
+      var ele = document.getElementById("amt["+(i+1)+"]");
+
+      var elest = 0;
+      if(ele != null && ele.value != "")
+      {
+        if (isNaN(ele.value)) 
+        {
+           st=0;
+           alert("Amount should be number only");
+           break;
+        }
+        else
+        elest = parseInt(ele.value);
+        st = st + elest;
+      }
+    }
+
+    if(st != 0)
+    {
+       tax = Math.round(st * 0.15);
+       gt = st + tax; 
+    }
+  }
+
+
+  document.getElementById("invoice_subtotal").innerHTML = st;
+  $("#tax").val(tax);
+  document.getElementById("invoice_tax").innerHTML = tax;
+  $("#amount").val(gt);
+  document.getElementById("invoice_grandtotal").innerHTML = gt;
+  
+}
+function addRow(tableID) {
+      var table = document.getElementById(tableID);
+      rowCount = table.rows.length-3;
+      var row = table.insertRow(rowCount);
+      var cell1 = row.insertCell(0);
+//Create array of options to be added
+var array = ["Select Line Item","Setup Charges","Device Charges","Transaction Charges","Others"];
+//Create and append select list
+var selectList = document.createElement("select");
+selectList.id = "select["+rowCount+"]";
+selectList.name = "select["+rowCount+"]";
+
+//Create and append the options
+for (var i = 0; i < array.length; i++) {
+    var option = document.createElement("option");
+    if(i==0)
+      option.value = "";
+    else
+      option.value = array[i];
+    option.text = array[i];
+    selectList.appendChild(option);
+}
+
+      cell1.appendChild(selectList);
+      var cell2 = row.insertCell(1);
+      var element2 = document.createElement("input");
+      element2.type = "text";
+      element2.id = "desc["+rowCount+"]";
+      element2.name = "desc["+rowCount+"]";
+       
+      cell2.appendChild(element2);
+
+      var cell3 = row.insertCell(2);
+      var element3 = document.createElement("input");
+      element3.type = "text";
+      element3.id = "amt["+rowCount+"]";
+      element3.name = "amt["+rowCount+"]";
+      element3.onchange = calculate;
+      cell3.appendChild(element3);
+
+      var cell4 = row.insertCell(3);
+      var element4 = document.createElement("input");
+      element4.type = "button";
+      var btnName = "button" + (rowCount + 1);
+      element4.setAttribute('value', 'Delete'); // or element1.value = "button";
+      element4.onclick = function () { removeRow(this); }
+      cell4.appendChild(element4);
+      
+  }
+  function removeRow(currElement) {
+    var parentRowIndex = currElement.parentNode.parentNode.rowIndex;
+    var table = document.getElementById("invoice_tbl");
+    table.deleteRow(parentRowIndex);
+    calculate();
+  }
+</script>
+
+
+<script type="text/javascript">
+
+  var table = document.getElementById("invoice_tbl");
+  var a  = table.rows.length
+  $("#t").click(function(){
+     var newArray = new Array();
+    for (i = 1; i < table.rows.length; i++) { 
+      newArray.push($("#test"+i).val());
+    };
+    var total = 0;
+    for (var i = 0; i < newArray.length; i++) {
+      total += newArray[i] << 0;
+    }
+    $(".sub_total").html(total);
+    $(".tax").html(total*15/100);
+    $(".grand_total").html(total+total*15/100);
+  })
+
+</script>
+
+
+<%unless @epsadmin_invoice.nil?%>
+<script type="text/javascript">
+function addRowTable(obj1,obj2,obj3){
+   var table = document.getElementById("invoice_tbl");
+      rowCount = table.rows.length-3;
+      var row = table.insertRow(rowCount);
+      var cell1 = row.insertCell(0);
+//Create array of options to be added
+if(obj1.toLowerCase().replace(/\s/g, '') == "setupcharges"){
+var array = ["Setup Charges","Select Line Item","Device Charges","Transaction Charges","Others"];
+}
+if(obj1.toLowerCase().replace(/\s/g, '') == "devicecharges"){
+  var array = ["Device Charges","Select Line Item","Setup Charges","Transaction Charges","Others"];
+}
+if(obj1.toLowerCase().replace(/\s/g, '') == "transactioncharges"){
+  var array = ["Transaction Charges","Select Line Item","Setup Charges","Device Charges","Others"];
+}
+if(obj1.toLowerCase().replace(/\s/g, '') == "others"){
+  var array = ["Others","Select Line Item","Setup Charges","Transaction Charges","Device Charges"];
+}
+//Create and append select list
+var selectList = document.createElement("select");
+selectList.id = "select["+rowCount+"]";
+selectList.name = "select["+rowCount+"]";
+
+//Create and append the options
+for (var i = 0; i < array.length; i++) {
+    var option = document.createElement("option");
+    if(array[i].toLowerCase().replace(/\s/g, '') == "selectlineitem")
+      option.value = "";
+    else
+    option.value = array[i];
+    option.text = array[i];
+    selectList.appendChild(option);
+}
+
+      cell1.appendChild(selectList);
+      var cell2 = row.insertCell(1);
+      var element2 = document.createElement("input");
+      element2.type = "text";
+      element2.id = "desc["+rowCount+"]";
+      element2.name = "desc["+rowCount+"]";
+      element2.value = obj2;
+      cell2.appendChild(element2);
+
+      var cell3 = row.insertCell(2);
+      var element3 = document.createElement("input");
+      element3.type = "text";
+      element3.id = "amt["+rowCount+"]";
+      element3.name = "amt["+rowCount+"]";
+      element3.value = obj3;
+      element3.onchange = calculate;
+      cell3.appendChild(element3);
+
+      var cell4 = row.insertCell(3);
+      var element4 = document.createElement("input");
+      element4.type = "button";
+      var btnName = "button" + (rowCount + 1);
+      element4.setAttribute('value', 'Delete'); // or element1.value = "button";
+      element4.onclick = function () { removeRow(this); }
+      cell4.appendChild(element4);
+    }
+var no_of_items = '<%=@epsadmin_invoice.invoice_line_items.count%>'
+var line_items = $.parseJSON('<%=raw(@epsadmin_invoice.invoice_line_items.collect{|x|[x.line_item_type+"|"+x.description+"|"+x.amount.to_s].join(" ")})%>')
+
+ for(i=0;i<no_of_items;i++){
+   var obj = line_items[i].split("|");
+   addRowTable(obj[0],obj[1],obj[2]);
+ }
+<% if params[:action] == "edit" %>
+  document.getElementById("invoice_subtotal").innerHTML = "<%=@epsadmin_invoice.invoice_amount - @epsadmin_invoice.tax%>";
+  document.getElementById("invoice_tax").innerHTML = "<%=@epsadmin_invoice.tax%>";
+  document.getElementById("invoice_grandtotal").innerHTML = "<%=@epsadmin_invoice.invoice_amount%>";
+ <% end %>
+</script>
+<%end%>
+
+
+
+         

@@ -1,0 +1,149 @@
+<section>
+  <div class="container">
+    <% if !flash[:notice].nil? || !flash[:notice].blank? %>
+      <p class="alert alert-success">
+          <a title="close" aria-label="close" data-dismiss="alert" class="close" href="#">×</a>
+          <%= flash[:notice] %>
+      </p>
+    <% end %>
+    <div class="padding_inner">
+      <h1>User Management</h1>   
+      <div class="user_add user_add_btn">  
+        <div class="pull-right">
+          <%= link_to 'Add New', new_epsadmin_admin_path, :class =>"btn btn-primary" %>
+        </div>
+        <div class="clearfix"></div>
+      </div>
+      <!--merchant_table-->
+      <div class="merchant_table table-responsive">
+        <table class="display table text-center" id="admin_user">
+          <thead>
+              <tr>
+                <th>Created On</th>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Disabled</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @epsadmin_users.each do |user| %>
+                <tr>
+                  <td>
+                    <%= user.created_at.to_time.strftime('%d/%m/%Y at %l:%M %p') unless user.created_at.nil? %>
+                  </td>
+                  <td>
+                    <%= link_to user.full_name, epsadmin_admin_path(user) %>
+                  </td>
+                  <td>
+                    <%= user.email %>
+                  </td>
+                  <td>
+                    <%= user.role %>
+                  </td>     
+                  <td> 
+                    <% if user.role != "superadmin" %>
+                      <% if user.disabled == false %>
+                        <span style="cursor: pointer;" onClick="pop('popDiv')" class="popup btn btn-danger user_pay_btn" id="<%=user.id%>">Disable</span>
+                      <% else %>
+                        <span style="cursor: pointer;" onClick="pop('popDiv')" class="popup btn btn-success user_pay_btn" id="<%=user.id%>">Activate</span>
+                      <% end %>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <!--merchant_table ends-->
+    </div>
+  </div>
+</section>
+
+
+<div id="popDiv" class="ontop">
+  <table cellpadding="4" cellspacing="4" id="popup">
+    <tr>
+      <td align="right">
+        <a title="Click here to close the pop-up" href="#" onClick="hide('popDiv')">X</a>
+      </td>
+    </tr>
+    <tr>
+      <td align="center">
+        <span id="alert_msg"></span>
+        <input type="hidden" id="uid" name="uid">
+        <input type="hidden" id="stat" name="stat">
+      </td>
+    </tr>
+    <tr>
+      <td id="button" align="center">
+        <input type="button" onClick="hide('popDiv')" value="Cancel">
+        <input type="submit" value="Submit" id="status">
+      </td>
+    </tr>
+  </table>
+</div>
+
+
+<script type="text/javascript">
+
+  <% if @epsadmin_users.count < 50 %>
+    $(document).ready( function() {
+      $('#admin_user').dataTable({
+        "aaSorting": [],
+        "bPaginate": false,  
+        "iDisplayLength": 50,
+        "aLengthMenu": [[50, 100, 150, -1], [50, 100, 150, "All"]]
+      });
+    });
+  <% else %>
+    $(document).ready( function() {
+        $('#admin_user').dataTable({
+          "aaSorting": [],
+          "bPaginate": true,
+          "iDisplayLength": 50,
+          "aLengthMenu": [[50, 100, 150, -1], [50, 100, 150, "All"]]
+      });
+    });
+  <% end %>
+
+  $(".popup").click(function(){
+    var val = $("#uid").val($(this).attr('id'));
+    var stat = $("#stat").val($(this).text());
+    if($(this).text()=="Disable")
+    var msg=$("#alert_msg").text("Are you sure you want to Disable the User");
+    else
+    var msg=$("#alert_msg").text("Are you sure you want to Activate the User");
+  })
+
+  $("#status").click(function() {
+    var uid = $("#uid").val();
+    var stat = $("#stat").val();
+    $.ajax({
+      url: "/epsadmin/admins/update_user_status",
+      type: "POST",
+      data: {"stat" : stat, "uid" : uid},
+      dataType: "json",
+      success: function(data) {
+        alert("Successfully updated the status")
+        location.reload();
+          // return true;
+      }
+    });
+  });
+
+  function pop(div) {
+    document.getElementById(div).style.display = 'block';
+  }
+  function hide(div) {
+    document.getElementById(div).style.display = 'none';
+  }
+  //To detect escape button
+  document.onkeydown = function(evt) {
+    evt = evt || window.event;
+    if (evt.keyCode == 27) {
+      hide('popDiv');
+    }
+  };
+
+</script>

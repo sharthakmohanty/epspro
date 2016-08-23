@@ -1,0 +1,334 @@
+<section>
+  <div class="container">
+    <div class="padding_inner">
+      <% if params[:action] == "new" || params[:action] == "create" %>
+        <h1>
+          <%= render_breadcrumbs :separator => ' > ' %> > Add Device
+        </h1>
+      <% else %>
+        <h1>
+          <%= render_breadcrumbs :separator => ' > ' %> > Edit Device - <%= @epsadmin_device.terminal_id %>
+        </h1>
+      <% end %>
+      
+      <div class="tab_menu">
+        <ul>
+          <li>
+            <%= link_to "Details",epsadmin_merchant_path(@merchant.merchant_uniq_id) %>
+          </li>
+          <li>
+            <%= link_to "Devices",epsadmin_merchant_devices_path(@merchant.merchant_uniq_id), :class=>"active"%>
+          </li>
+          <li>
+            <%= link_to 'Transactions', epsadmin_merchant_transaction_path(@merchant.merchant_uniq_id) %>
+          </li>
+          <li>
+            <%= link_to 'Invoices', epsadmin_merchant_invoices_path(@merchant.merchant_uniq_id) %>
+          </li>
+        </ul>
+        <div class="clearfix"></div>
+      </div><!--tab_menu ends-->
+      <div class="clearfix"></div>  
+
+      <%= form_for([:epsadmin, @merchant,@epsadmin_device]) do |f| %>
+        <% if @epsadmin_device.errors.any? %>
+          <div id="error_explanation">
+            <h2><%= pluralize(@epsadmin_device.errors.count, "error") %> prohibited this device from being saved:</h2>
+            <ul>
+            <% @epsadmin_device.errors.full_messages.each do |msg| %>
+              <li class="error_msg"><%= msg %></li>
+            <% end %>
+            </ul>
+          </div>
+        <% end %> 
+
+        <div class="table_outer">
+          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <div class="merchant_details">
+              <div class="row">           
+                <table>
+                  <tr>
+                    <td>
+                      <%= f.label :device_serial_number%>
+                    </td>
+                    <td>
+                      <div class="form-group">               
+                          <%= f.text_field :device_serial_number, :class=>"form-control" %>
+                       </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <%= f.label :sim_phone_number %>
+                    </td>
+                    <td>
+                      <div class="form-group">                            
+                        <%= f.text_field :sim_phone_number, :class=>"form-control" %>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <%= f.label :device_make %>
+                    </td>
+                    <td>
+                      <div class="form-group" >
+                        <select name="device_make" id="type" class="form-control" >
+                          <option name="device_make" value="">Select Device Make</option>
+
+                          <% if @epsadmin_device.device_make == "Falcon Plus" %>
+                            <option name="device_make" value="Falcon Plus" selected="selected">Falcon Plus</option>
+                          <% else %>
+                            <option name="device_make" value="Falcon Plus">Falcon Plus</option>
+                          <% end %>
+
+                          <% if @epsadmin_device.device_make == "Leopard" %>
+                            <option name="device_make" value="Leopard" selected="selected">Leopard</option>
+                          <% else %>
+                            <option name="device_make" value="Leopard">Leopard</option>
+                          <% end %>
+
+                          <% if @epsadmin_device.device_make == "Leopard Plus" %>
+                            <option name="device_make" value="Leopard Plus" selected="selected">Leopard Plus</option>
+                          <% else %>
+                            <option name="device_make" value="Leopard Plus">Leopard Plus</option>
+                          <% end %>
+
+                        </select>   
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>                            
+                      <%= f.label :device_display %>
+                    </td>
+                    <td>
+                      <div class="form-group">
+                        <% if params[:action] == "new" || params[:action] == "create" %>
+                          <%= f.text_field :device_display, :class=>"form-control", :value => @merchant.business_name %>
+                        <% else %>
+                          <%= f.text_field :device_display, :class=>"form-control" %>
+                        <% end %>
+                      </div>
+                    </td>
+                  </tr>                  
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <div class="merchant_details business_details">
+              <div class="row">           
+                <table>
+                  <tr>
+                    <td>
+                      <%= f.label :setup_cost %> (Rs.)
+                    </td>
+                    <td>
+                      <div class="form-group">                            
+                        <%= f.text_field :setup_cost, :class=>"form-control" %>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <%= f.label :monthly_cost %> (Rs.)
+                    </td>
+                    <td>
+                      <div class="form-group">  
+                        <%= f.text_field :monthly_cost, :class=>"form-control" %>
+                      </div>
+                    </td>
+                  </tr> 
+                  <tr>
+                    <td>                      
+                      <%= f.label :transaction_cost %> (Rs.)
+                    </td>
+                    <td>
+                      <div class="form-group"> 
+                        <%= f.text_field :transaction_cost, :class=>"form-control" %>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <%= f.label :parent_id, "Replacement for" %> (Terminal Id)
+                    </td>
+                    <td>
+                      <div class="form-group">
+                        <% a = @merchant.devices.where(:device_status=>"deactivated").collect{|i| i.id.to_s}%>
+                        <% b = @merchant.devices.all.collect{|i| i.parent_id.to_s}%>
+                        <% c = a&b %>
+                        <% d = a-c %>
+                        <% if (params[:action] == "edit" || params[:action] == "update") && (!@epsadmin_device.parent_id.empty? || !@epsadmin_device.parent_id.blank?) %>
+                          <% @dt = Device.where(:id => @epsadmin_device.parent_id).first %>
+                            <input type="text" value= <%= @dt.terminal_id %> disabled >
+                            <%= f.hidden_field :parent_id, :value => @epsadmin_device.parent_id %>
+                        <% else %>
+                          <%= f.collection_select :parent_id, @merchant.devices.where(:id.in => d), :id, :terminal_id, include_blank: 'Select A Device' %>
+                        <% end %>
+                      </div>
+                    </td>
+                  </tr> 
+                  <% if params[:action] == "edit" || params[:action] == "update" %>
+                    <tr class="add_top">
+                      <td>     
+                        <%= f.label :version_comments %>
+                      </td>
+                      <td>
+                        <div class="form-group">
+                           <textarea class="form-control" id="version_comments" name="version_comments"></textarea> 
+                        </div>
+                      </td>
+                    </tr> 
+                  <% end %> 
+                  <%= f.hidden_field :merchant_id,:value => "#{@merchant.id}" %>
+                  <%= f.hidden_field :device_status, :value => "pending" %>
+                </table>
+              </div>
+            </div>
+          </div>  
+
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="merchant_details leopard_bank">
+              <div class="row" id="falcon" style="width: 47%;">   
+                <h2>Bank Details</h2>        
+                <table>
+                  <tr>
+                    <td>
+                      <%= f.label :bank_mmid, 'Bank MMID (Mobile Money Transfer Identifier )' %>
+                    </td>
+                    <td>
+                      <div class="form-group">                            
+                        <%= f.text_field :bank_mmid, :class=>"form-control" %>
+                      </div>
+                    </td>
+                  </tr> 
+                </table>
+              </div>
+
+              <div class="row" id="leopard">   
+                <h2>Bank Details</h2>     
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">          
+                  <table width="100%">
+                    <tr>
+                      <td>
+                        <%= f.label :pg_merchant_id, 'Payment Gateway Merchant Id' %>
+                      </td>
+                      <td>
+                        <div class="form-group">                            
+                          <%= f.text_field :pg_merchant_id, :class=>"form-control" %>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <%= f.label :pg_key, 'Payment Gateway Key' %>
+                      </td>
+                      <td>
+                        <div class="form-group">                            
+                          <%= f.text_field :pg_key, :class=>"form-control" %>
+                        </div>
+                      </td>
+                    </tr>
+                    </table>
+                  </div>
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">          
+                  <table width="100%">
+                    <tr>
+                    <td>
+                      <%= f.label :pg_salt, 'Payment Gateway Salt' %>
+                    </td>
+                    <td>
+                      <div class="form-group">                            
+                        <%= f.text_field :pg_salt, :class=>"form-control" %>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <%= f.label :tablet_serial_number %>
+                    </td>
+                    <td>
+                      <div class="form-group">                            
+                        <%= f.text_field :tablet_serial_number, :class=>"form-control" %>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              </div>
+
+              <div class="row" id="leopard_plus">  
+                <h2>Bank Details</h2>                
+                <table>
+                  <tr>
+                    <td>
+                      Leopard Plus Bank Details Fields Will Come Here
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="clearfix"></div>  
+
+          <div class="submit_space text-center">
+            <%= f.submit :class=>"btn btn-success" %>
+          </div>
+        </div><!--table_outer ends-->
+      <% end %>
+    </div>
+  </div>
+</section> 
+
+
+<script type="text/javascript">
+  $(function() {
+    $('#falcon').hide();
+    $('#leopard').hide(); 
+    $('#leopard_plus').hide();  
+    $('#type').change(function(){
+      if($('#type').val() == 'Falcon Plus') {
+          $('#falcon').show(); 
+          $('#leopard').hide(); 
+          $('#leopard_plus').hide(); 
+      } else if ($('#type').val() == 'Leopard') {
+          $('#leopard').show();
+          $('#falcon').hide(); 
+          $('#leopard_plus').hide();
+      } 
+      else if ($('#type').val() == 'Leopard Plus'){
+          $('#leopard_plus').show(); 
+          $('#falcon').hide(); 
+          $('#leopard').hide();
+      }
+      else{
+          $('#leopard_plus').hide(); 
+          $('#falcon').hide(); 
+          $('#leopard').hide();
+      }
+    });
+
+    //Used for showing the hidden div as shown if default is hidden while the page is reloaded - sharthak
+    if (localStorage) 
+    {
+      if (!localStorage.getItem('visited') && $('#type').val() == 'Falcon Plus') 
+      { // if not site is visited before
+        $('#falcon').show(); //show element
+      }
+      if (!localStorage.getItem('visited') && $('#type').val() == 'Leopard') 
+      {
+        $('#leopard').show();
+      }
+      if (!localStorage.getItem('visited') && $('#type').val() == 'Leopard Plus') 
+      { 
+        $('#leopard_plus').show();
+      }
+    }
+    //end
+
+  });
+</script>

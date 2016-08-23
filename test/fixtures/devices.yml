@@ -1,0 +1,31 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  device_serial_number: MyString
+  sim_phone_number: 1
+  sim_msid_number: MyString
+  device_make: MyString
+  device_display: MyString
+  bank_mmid: 1
+  device_status: MyString
+  terminal_id: 1
+  setup_cost: 1
+  monthly_cost: 1
+  transaction_cost: 1
+  parent_id: 1
+  merchant_id: 1
+
+two:
+  device_serial_number: MyString
+  sim_phone_number: 1
+  sim_msid_number: MyString
+  device_make: MyString
+  device_display: MyString
+  bank_mmid: 1
+  device_status: MyString
+  terminal_id: 1
+  setup_cost: 1
+  monthly_cost: 1
+  transaction_cost: 1
+  parent_id: 1
+  merchant_id: 1

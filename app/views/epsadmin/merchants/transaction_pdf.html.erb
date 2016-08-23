@@ -1,0 +1,124 @@
+<%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+<%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Device Details</title>
+  </head>
+    <body>
+      <table style="width:70%;margin:auto;font-family:arial;font-size:14px;">
+        <tr>
+          <td style="text-align:center;">
+            <h1 style="margin:0px;padding:10px 0px;">Transaction Details</h1>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div>
+              <table style="width:40%;line-height:30px;">       
+                <tr>
+                  <td>Transaction List For :</td>
+                  <td><%= @merchant.first_name %> <%= @merchant.last_name %></td>
+                </tr>
+                <tr>
+                  <td>Business Name :</td>
+                  <td><%= @merchant.business_name %></td>
+                </tr>
+                <tr>
+                  <td>Business Address :</td>
+                  <td><%= @merchant.business_address %></td>
+                </tr>
+                <tr>
+                  <td>Contact Number :</td>
+                  <td><%= @merchant.phone_number %></td>
+                </tr>
+                <tr>
+                  <td>Email ID :</td>
+                  <td><%= @merchant.email_address %></td>
+                </tr>
+              </table>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="details_dev">
+              <table cellpadding="0" cellspacing="0" style="width:100%;text-align:center;">
+                <tr style="background-color:#eee;">
+                  	<th>
+						Date
+					</th>
+					<th>
+						Device ID
+					</th>
+					<th>
+						Invoice
+					</th>
+					<th>
+						Type 
+					</th>
+					<th>
+						Amount
+					</th>
+					<th>
+						Status
+					</th>
+					<th>
+						Payment Comments
+					</th>
+                </tr>
+                <% @epsadmin_transaction_list.each do |transaction_list| %>
+					<% if !transaction_list.nil? || !transaction_list.blank? %>
+						<tr>
+							<td>
+								<%= transaction_list.created_at.to_time.strftime('%d/%m/%Y at %l:%M %p')unless transaction_list.created_at.nil? %>
+							</td>
+							<td>
+								<%= transaction_list.device.terminal_id %>
+								
+							</td>
+							<td>
+								<%= transaction_list.invoice_number unless transaction_list.invoice_number.nil? %>
+							</td>
+							<td>
+								<%= transaction_list.transaction_type unless transaction_list.transaction_type.nil? %>
+							</td>
+							<td>
+								<%= transaction_list.amount unless transaction_list.amount.nil? %>
+							</td>
+							<td>
+								<%= transaction_list.transaction_status.upcase unless transaction_list.transaction_status.nil? %>
+							</td>
+							<%if transaction_list.transaction_status=="paid"%>
+								<td>
+									<%= transaction_list.transaction_details unless transaction_list.transaction_details.nil? %>
+								</td>
+							<% else %>
+								<td>N/A</td>
+							<%end%>
+						</tr>
+					<% else %>
+						<tr>
+							<td colspan="7" style="color: red;">
+								Sorry No Records Available For The Given Time Period!
+							</td>
+						</tr>
+					<% end %>
+				<% end %>
+              </table>
+            </div>
+          </td>
+        </tr>
+      </table>
+
+      <style type="text/css">
+        .details_dev{margin-top: 15px;}
+        .details_dev table{border:1px solid #ddd;}
+        .details_dev th{padding:12px 0px;border-left:1px solid #ddd;border-bottom:1px solid #ddd;}
+        .details_dev td{padding:12px 0px;border-left:1px solid #ddd;}
+        .details_dev th:first-child, .details_dev td:first-child{border-left:none;}
+        .details_dev tr:nth-child(2n+1) td{background-color: #eff0f1;}
+      </style>
+    </body>
+  </html>
+</style>

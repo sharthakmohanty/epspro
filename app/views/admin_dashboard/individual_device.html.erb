@@ -1,0 +1,129 @@
+<section>
+  	<div class="container">
+  		<div class="padding_inner details_lookup">
+	  		<h1>Devices (<%= @individual_device.terminal_id.upcase %>)</h1>		  		
+	  		<div class="table_outer">
+		  		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+			  		<div class="merchant_details">
+				  		<div class="row">			  		
+					  		<table>
+					  			<tr>
+					  				<td>
+					  					Device Serial Number: 
+					  				</td>
+					  				<td>
+					  					<%=@individual_device.device_serial_number%>
+					  				</td>
+					  			</tr>
+								<tr>
+					  				<td>
+					  					Sim Phone Number: 
+					  				</td>
+					  				<td>
+					  					<%=@individual_device.sim_phone_number%>
+					  				</td>
+					  			</tr>
+					  			<tr>
+					  				<td>
+					  					Sim Msid Number: 
+					  				</td>
+					  				<td>
+					  					<%=@individual_device.sim_msid_number%>
+					  				</td>
+					  			</tr>	
+					  			<tr>
+					  				<td>
+					  					Device Make: 
+					  				</td>
+					  				<td>
+					  					<%=@individual_device.device_make%>
+					  				</td>
+					  			</tr>
+					  			<tr>
+					  				<td>
+					  					Device Display: 
+					  				</td>
+					  				<td>
+					  					<%= @individual_device.device_display %>
+					  				</td>
+					  			</tr>	
+					  			<tr>
+					  				<td>
+			  							Status: 
+					  				</td>
+					  				<td>
+					  					<% if @individual_device.device_status == "active" %>
+				  							<b class="active">
+			  									<%= @individual_device.device_status.upcase unless @individual_device.device_status.nil? %>
+			  								</b>
+		  								<% else %>
+											<b class="pending">
+			  									<%= @individual_device.device_status.upcase unless @individual_device.device_status.nil? %>
+			  								</b>
+		  								<% end %>
+					  				</td>
+					  			</tr>		  					  			
+							</table>
+						</div>
+			  		</div>
+		  		</div>
+
+			  	<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+				  	<div class="merchant_details">
+				  		<div class="row">			  		
+					  		<table>
+					  			<tr>
+					  				<td>
+					  					Terminal Id: 
+									</td>
+					  				<td>
+					  					<%= @individual_device.terminal_id %>
+					  				</td>
+					  			</tr>
+					  			<tr>
+					  				<td>
+					  					Setup Coast: 
+					  				</td>
+					  				<td>
+					  					<%= @individual_device.setup_cost %>
+					  				</td>
+					  			</tr>
+					  			<tr>
+					  				<td>
+					  					Monthly Cost: 
+					  				</td>
+					  				<td>
+					  					<%= @individual_device.monthly_cost%> 
+					  				</td>
+					  			</tr>	
+					  			<tr>
+					  				<td>
+					  					Transaction Cost: 
+					  				</td>
+					  				<td>
+					  					<%= @individual_device.transaction_cost %>
+					  				</td>
+					  			</tr>
+					  			<tr>
+					  				<td>
+					  					Replacement Terminal Id: 
+					  					<% @terminal = Device.where(:id => @individual_device.parent_id).first %>
+				  					</td>
+					  				<td>
+					  					<%= @terminal.terminal_id unless @terminal.nil? %>
+					  				</td>
+					  			</tr>			  					  			
+							</table>
+				  		</div>
+		  			</div>
+			  	</div>	
+			  	<div class="clearfix"></div>	
+			  	<div class="submit_space button_space text-center">	
+			  	<%#= link_to 'Back', admin_dashboard_all_device_path, :class => "btn btn-primary" %>
+			  	<%= link_to 'Back', dashboard_merchant_detail_path, :class => "btn btn-primary" %>			
+			  	</div>
+		  	</div><!--table_outer ends-->
+		</div>
+  	</div>
+</section> 
+  
